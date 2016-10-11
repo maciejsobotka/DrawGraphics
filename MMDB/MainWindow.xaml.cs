@@ -23,12 +23,16 @@ namespace MMDB
     public partial class MainWindow : Window
     {
         private string imgPath = "";
-        private ImageWindow imgWindow;
         public MainWindow()
         {
             InitializeComponent();
         }
-        private void buttonImgSelect_Click(object sender, EventArgs e)
+        private void NewFile_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OpenFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "JPEG |*.JPG;*.JPEG";
@@ -39,15 +43,14 @@ namespace MMDB
             textBoxSource.Foreground = Brushes.Black;
             textBoxSource.FontStyle = FontStyles.Normal;
             textBoxSource.Text = imgPath;
+            ShowImage();
         }
 
-        private void buttonShowImg_Click(object sender, EventArgs e)
+        private void ShowImage()
         {
             if (File.Exists(imgPath))
             {
-                imgWindow = new ImageWindow();
-                imgWindow.SetImage(imgPath);
-                imgWindow.Show();
+                SetImage(imgPath);
                 changePixelButton.IsEnabled = true;
                 avgColorButton.IsEnabled = true;
             }
@@ -57,7 +60,7 @@ namespace MMDB
 
         private void changePixelButton_Click(object sender, RoutedEventArgs e)
         {
-            BitmapSource img = imgWindow.canvas.Source as BitmapSource;
+            BitmapSource img = canvas.Source as BitmapSource;
             int stride = img.PixelWidth * 4;                // 4*8
             int size = img.PixelHeight * stride;
             byte[] pixels = new byte[size];
@@ -73,12 +76,12 @@ namespace MMDB
             pixels[index2 + 1] = 255;
             pixels[index2 + 2] = 255;
           
-            imgWindow.SetImage(img.PixelWidth, img.PixelHeight, img.DpiX, img.DpiY, PixelFormats.Bgr32, pixels, stride);
+            SetImage(img.PixelWidth, img.PixelHeight, img.DpiX, img.DpiY, PixelFormats.Bgr32, pixels, stride);
         }
 
         private void avgColorButton_Click(object sender, RoutedEventArgs e)
         {
-            BitmapSource img = imgWindow.canvas.Source as BitmapSource;
+            BitmapSource img = canvas.Source as BitmapSource;
             int stride = img.PixelWidth * 4;                // 4*8
             int size = img.PixelHeight * stride;
             byte[] pixels = new byte[size];
@@ -101,5 +104,72 @@ namespace MMDB
         {
             return y * stride + 4 * x;
         }
+
+        private void newFile_MouseEnter(object sender, MouseEventArgs e)
+        {
+            newFile.Foreground = Brushes.Black;
+        }
+
+        private void newFile_MouseLeave(object sender, MouseEventArgs e)
+        {
+            newFile.Foreground = Brushes.White;
+        }
+
+        private void openFile_MouseEnter(object sender, MouseEventArgs e)
+        {
+            openFile.Foreground = Brushes.Black;
+        }
+
+        private void openFile_MouseLeave(object sender, MouseEventArgs e)
+        {
+            openFile.Foreground = Brushes.White;
+        }
+
+        //==========================================
+
+                public void SetImage(string imgPath)
+        {
+            BitmapImage img = new BitmapImage(new Uri(imgPath));
+            SetCanvasSize(img.PixelWidth, img.PixelHeight);
+            canvas.Source = img;
+        }
+
+        public void SetImage(int width, int height, double dpiX, double dpiY, PixelFormat pf, byte[] pixels, int stride)
+        {
+            BitmapSource img = BitmapSource.Create(
+                width,
+                height,
+                dpiX,
+                dpiY,
+                pf,
+                /* palette: */ null,
+                pixels,
+                stride);
+            SetCanvasSize(img.PixelWidth, img.PixelHeight);
+            canvas.Source = img;
+        }
+
+        private void SetCanvasSize(int pixelWidth, int pixelHeight)
+        {
+            canvas.Height = 600;
+            canvas.Width = 600;
+            if (pixelHeight > pixelWidth)
+                if (canvas.Height > pixelHeight)
+                {
+                    canvas.Height = pixelHeight;
+                    canvas.Width = pixelWidth;
+                }
+                else
+                    canvas.Width = (Height / pixelHeight) * pixelWidth;
+            if (pixelHeight < pixelWidth)
+                if (canvas.Width > pixelWidth)
+                {
+                    canvas.Height = pixelHeight;
+                    canvas.Width = pixelWidth;
+                }
+                else
+                    canvas.Height = (Width / pixelWidth) * pixelHeight;
+        }
+
     }
 }

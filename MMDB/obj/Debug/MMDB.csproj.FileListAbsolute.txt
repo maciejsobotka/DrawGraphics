@@ -13,3 +13,5 @@ D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\MMDB.exe
 D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\MMDB.pdb
 D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\ImageWindow.baml
 D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\ImageWindow.g.cs
+D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\MenuDictionary.baml
+D:\Sobot\Programowanie\Programy C#\MMDB\MMDB\obj\Debug\App.baml
