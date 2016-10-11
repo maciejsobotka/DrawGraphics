@@ -23,13 +23,43 @@ namespace MMDB
     public partial class MainWindow : Window
     {
         private string imgPath = "";
+        private bool imageLoaded = false;
+        private bool imageNew = false;
+        private bool drawLine = false;
+        private bool drawCircle = false;
+        private Point p;
+        private Point p1;
+        private Point p2;
+        private VectorDraw vd;
+        private List<Shape> shapes;
+        
         public MainWindow()
         {
             InitializeComponent();
+            vd = new VectorDraw();
+            shapes = new List<Shape>();
+            p.X = 0.0;
+            p.Y = 0.0;
         }
+
+        //=====================================================================
+        // Menu
         private void NewFile_Click(object sender, EventArgs e)
         {
-
+            if (imageLoaded || imageNew)
+            {
+                canvas.Source = null;
+                ClearObjects();
+                textBoxSource.Text = "New File";
+            }
+            canvasGrid.Background = Brushes.White;
+            imageNew = true;
+            imageLoaded = false;
+            textBoxSource.Text = "";
+            textBoxSource.Foreground = Brushes.Black;
+            textBoxSource.FontStyle = FontStyles.Normal;
+            textBoxSource.Text = "New File";
+            EnableButtons();
         }
 
         private void OpenFile_Click(object sender, EventArgs e)
@@ -39,25 +69,115 @@ namespace MMDB
             dlg.Multiselect = false;  // default
             dlg.ShowDialog();
             imgPath = dlg.FileName;
+            
             textBoxSource.Text = "";
             textBoxSource.Foreground = Brushes.Black;
             textBoxSource.FontStyle = FontStyles.Normal;
             textBoxSource.Text = dlg.SafeFileName;
+
+            if (imageNew || imageLoaded)
+            {
+                canvasGrid.Background = null;
+                ClearObjects();
+                canvasGrid.Children.Add(canvas);
+            }
             ShowImage();
+            imageLoaded = true;
+            imageNew = false;
+            EnableButtons();
         }
 
+        private void newFile_MouseEnter(object sender, MouseEventArgs e)
+        {
+            newFile.Foreground = Brushes.Black;
+        }
+
+        private void newFile_MouseLeave(object sender, MouseEventArgs e)
+        {
+            newFile.Foreground = Brushes.White;
+        }
+
+        private void openFile_MouseEnter(object sender, MouseEventArgs e)
+        {
+            openFile.Foreground = Brushes.Black;
+        }
+
+        private void openFile_MouseLeave(object sender, MouseEventArgs e)
+        {
+            openFile.Foreground = Brushes.White;
+        }
+        //=====================================================================
+        // Load image
         private void ShowImage()
         {
             if (File.Exists(imgPath))
             {
                 SetImage(imgPath);
-                changePixelButton.IsEnabled = true;
-                avgColorButton.IsEnabled = true;
             }
             else
                 MessageBox.Show("Incorrect file path!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
+        public void SetImage(string imgPath)
+        {
+            BitmapImage img = new BitmapImage(new Uri(imgPath));
+            SetCanvasSize(img.PixelWidth, img.PixelHeight);
+            canvas.Source = img;
+        }
+
+        public void SetImage(int width, int height, double dpiX, double dpiY, PixelFormat pf, byte[] pixels, int stride)
+        {
+            BitmapSource img = BitmapSource.Create(
+                width,
+                height,
+                dpiX,
+                dpiY,
+                pf,
+                /* palette: */ null,
+                pixels,
+                stride);
+            SetCanvasSize(img.PixelWidth, img.PixelHeight);
+            canvas.Source = img;
+        }
+
+        private void SetCanvasSize(int pixelWidth, int pixelHeight)
+        {
+            canvas.Height = 600;
+            canvas.Width = 600;
+            if (pixelHeight > pixelWidth)
+                if (canvas.Height > pixelHeight)
+                {
+                    canvas.Height = pixelHeight;
+                    canvas.Width = pixelWidth;
+                }
+                else
+                    canvas.Width = (Height / pixelHeight) * pixelWidth;
+            if (pixelHeight < pixelWidth)
+                if (canvas.Width > pixelWidth)
+                {
+                    canvas.Height = pixelHeight;
+                    canvas.Width = pixelWidth;
+                }
+                else
+                    canvas.Height = (Width / pixelWidth) * pixelHeight;
+        }
+        private void EnableButtons()
+        {
+            //changePixelButton.IsEnabled = true;
+            //avgColorButton.IsEnabled = true;
+            lineButton.IsEnabled = true;
+            circleButton.IsEnabled = true;
+        }
+
+        private void ClearObjects()
+        {
+            canvasGrid.Children.Clear();
+            shapes.Clear();
+            listOfObjects.Items.Clear();
+        }
+
+        //=====================================================================
+        // Old stuff not for Vector graphics
         private void changePixelButton_Click(object sender, RoutedEventArgs e)
         {
             BitmapSource img = canvas.Source as BitmapSource;
@@ -105,70 +225,34 @@ namespace MMDB
             return y * stride + 4 * x;
         }
 
-        private void newFile_MouseEnter(object sender, MouseEventArgs e)
+        //=====================================================================
+        // Vector graphics
+        private void lineButton_Click(object sender, RoutedEventArgs e)
         {
-            newFile.Foreground = Brushes.Black;
+            drawLine = true;
+            drawCircle = false;
         }
 
-        private void newFile_MouseLeave(object sender, MouseEventArgs e)
+        private void circleButton_Click(object sender, RoutedEventArgs e)
         {
-            newFile.Foreground = Brushes.White;
+            drawCircle = true;
+            drawLine = false;
         }
 
-        private void openFile_MouseEnter(object sender, MouseEventArgs e)
+        private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            openFile.Foreground = Brushes.Black;
-        }
-
-        private void openFile_MouseLeave(object sender, MouseEventArgs e)
-        {
-            openFile.Foreground = Brushes.White;
-        }
-
-        //==========================================
-
-                public void SetImage(string imgPath)
-        {
-            BitmapImage img = new BitmapImage(new Uri(imgPath));
-            SetCanvasSize(img.PixelWidth, img.PixelHeight);
-            canvas.Source = img;
-        }
-
-        public void SetImage(int width, int height, double dpiX, double dpiY, PixelFormat pf, byte[] pixels, int stride)
-        {
-            BitmapSource img = BitmapSource.Create(
-                width,
-                height,
-                dpiX,
-                dpiY,
-                pf,
-                /* palette: */ null,
-                pixels,
-                stride);
-            SetCanvasSize(img.PixelWidth, img.PixelHeight);
-            canvas.Source = img;
-        }
-
-        private void SetCanvasSize(int pixelWidth, int pixelHeight)
-        {
-            canvas.Height = 600;
-            canvas.Width = 600;
-            if (pixelHeight > pixelWidth)
-                if (canvas.Height > pixelHeight)
+            if(drawLine)
+                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                else if (p2 == p)
                 {
-                    canvas.Height = pixelHeight;
-                    canvas.Width = pixelWidth;
+                    p2 = Mouse.GetPosition(canvasGrid);
+                    Line line = vd.CreateLine(p1, p2, 2, Brushes.LightSteelBlue);
+                    canvasGrid.Children.Add(line);
+                    shapes.Add(line);
+                    listOfObjects.Items.Add(vd.ParametersToString(line));
+                    p1 = p;
+                    p2 = p;        
                 }
-                else
-                    canvas.Width = (Height / pixelHeight) * pixelWidth;
-            if (pixelHeight < pixelWidth)
-                if (canvas.Width > pixelWidth)
-                {
-                    canvas.Height = pixelHeight;
-                    canvas.Width = pixelWidth;
-                }
-                else
-                    canvas.Height = (Width / pixelWidth) * pixelHeight;
         }
 
     }
