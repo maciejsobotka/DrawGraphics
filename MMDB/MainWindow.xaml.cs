@@ -42,7 +42,7 @@ namespace MMDB
             textBoxSource.Text = "";
             textBoxSource.Foreground = Brushes.Black;
             textBoxSource.FontStyle = FontStyles.Normal;
-            textBoxSource.Text = imgPath;
+            textBoxSource.Text = dlg.SafeFileName;
             ShowImage();
         }
 

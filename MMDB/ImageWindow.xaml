@@ -1,6 +1,0 @@
-﻿<Window x:Class="MMDB.ImageWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="ImageWindow" Height="Auto" Width="Auto" SizeToContent="WidthAndHeight">
-    <Image x:Name="canvas" HorizontalAlignment="Left" Height="600" VerticalAlignment="Top" Width="600"/>
-</Window>
