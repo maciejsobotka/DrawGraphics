@@ -231,12 +231,16 @@ namespace MMDB
         {
             drawLine = true;
             drawCircle = false;
+            p1 = p;
+            p2 = p;
         }
 
         private void circleButton_Click(object sender, RoutedEventArgs e)
         {
             drawCircle = true;
             drawLine = false;
+            p1 = p;
+            p2 = p;
         }
 
         private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
@@ -252,6 +256,13 @@ namespace MMDB
                     listOfObjects.Items.Add(vd.ParametersToString(line));
                     p1 = p;
                     p2 = p;        
+                }
+            if(drawCircle){
+                p1 = Mouse.GetPosition(canvasGrid);
+                Ellipse circle = vd.CreateEllipse(p1, 50, 50, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue, canvasGrid.ActualWidth, canvasGrid.ActualHeight);
+                canvasGrid.Children.Add(circle);
+                listOfObjects.Items.Add(vd.ParametersToString(circle));
+                  
                 }
         }
 
