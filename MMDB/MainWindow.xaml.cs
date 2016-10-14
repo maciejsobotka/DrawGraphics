@@ -31,6 +31,7 @@ namespace MMDB
         private Point p2;
         private VectorDraw vd;
         private List<Shape> shapes;
+        private bool editMode = false;
         
         public MainWindow()
         {
@@ -168,6 +169,7 @@ namespace MMDB
             ellipseButton.IsEnabled = true;
             rectangleButton.IsEnabled = true;
             triangleButton.IsEnabled = true;
+            editButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -178,56 +180,7 @@ namespace MMDB
         }
 
         //=====================================================================
-        // Old stuff not for Vector graphics
-        private void changePixelButton_Click(object sender, RoutedEventArgs e)
-        {
-            BitmapSource img = canvas.Source as BitmapSource;
-            int stride = img.PixelWidth * 4;                // 4*8
-            int size = img.PixelHeight * stride;
-            byte[] pixels = new byte[size];
-            img.CopyPixels(pixels, stride, 0);
-            int index = GetPixelIndex(10,10,stride);
-            int index2 = GetPixelIndex(35, 50, stride);
-
-            pixels[index] = 0;
-            pixels[index+1] = 0;
-            pixels[index+2] = 255;
-
-            pixels[index2] = 0;
-            pixels[index2 + 1] = 255;
-            pixels[index2 + 2] = 255;
-          
-            SetImage(img.PixelWidth, img.PixelHeight, img.DpiX, img.DpiY, PixelFormats.Bgr32, pixels, stride);
-        }
-
-        private void avgColorButton_Click(object sender, RoutedEventArgs e)
-        {
-            BitmapSource img = canvas.Source as BitmapSource;
-            int stride = img.PixelWidth * 4;                // 4*8
-            int size = img.PixelHeight * stride;
-            byte[] pixels = new byte[size];
-            img.CopyPixels(pixels, stride, 0);
-            int red=0, green=0, blue=0;
-            for(int i=0; i < img.PixelWidth; ++i)
-                for(int j=0; j< img.PixelHeight; ++j)
-                {
-                    var index = GetPixelIndex(i, j, stride);
-                    red += pixels[index];
-                    green += pixels[index + 1];
-                    blue += pixels[index + 2];
-                }
-            red = red / (img.PixelWidth * img.PixelHeight);
-            green = green / (img.PixelWidth * img.PixelHeight);
-            blue = blue / (img.PixelWidth * img.PixelHeight);
-            colorRectangle.Fill = new SolidColorBrush(Color.FromRgb((byte) red, (byte) green,(byte)  blue));
-        }
-        private int GetPixelIndex(int x, int y, int stride)
-        {
-            return y * stride + 4 * x;
-        }
-
-        //=====================================================================
-        // Vector graphics
+        // Options management
         private void lineButton_Click(object sender, RoutedEventArgs e)
         {
             shape = Shapes.Line;
@@ -256,56 +209,79 @@ namespace MMDB
             p2 = p;
         }
 
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (editMode) editMode = false;
+            else editMode = true;
+        }
+
+        //=====================================================================
+        // Vector graphics
         private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(shape == Shapes.Line)
-                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
-                else if (p2 == p)
-                {
-                    p2 = Mouse.GetPosition(canvasGrid);
-                    Line line = vd.CreateLine(p1, p2, 2, Brushes.LightSteelBlue);
-                    canvasGrid.Children.Add(line);
-                    shapes.Add(line);
-                    listOfObjects.Items.Add(vd.ParametersToString(line));
-                    p1 = p;
-                    p2 = p;        
-                }
-            if (shape == Shapes.Ellipse)
-                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
-                else if (p2 == p)
-                {
-                    p2 = Mouse.GetPosition(canvasGrid);
-                    Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
-                    canvasGrid.Children.Add(ellipse);
-                    shapes.Add(ellipse);
-                    listOfObjects.Items.Add(vd.ParametersToString(ellipse));
-                    p1 = p;
-                    p2 = p;
-                }
-            if (shape == Shapes.Rectangle)
-                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
-                else if (p2 == p)
-                {
-                    p2 = Mouse.GetPosition(canvasGrid);
-                    Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
-                    canvasGrid.Children.Add(rectangle);
-                    shapes.Add(rectangle);
-                    listOfObjects.Items.Add(vd.ParametersToString(rectangle));
-                    p1 = p;
-                    p2 = p;
-                }
-            if (shape == Shapes.Triangle)
-                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
-                else if (p2 == p)
-                {
-                    p2 = Mouse.GetPosition(canvasGrid);
-                    Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
-                    canvasGrid.Children.Add(triangle);
-                    shapes.Add(triangle);
-                    listOfObjects.Items.Add(vd.ParametersToString(triangle));
-                    p1 = p;
-                    p2 = p;
-                }
+            if (!editMode)
+            {
+                if (shape == Shapes.Line)
+                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    else if (p2 == p)
+                    {
+                        p2 = Mouse.GetPosition(canvasGrid);
+                        Line line = vd.CreateLine(p1, p2, 2, Brushes.Black);
+                        line.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                        canvasGrid.Children.Add(line);
+                        shapes.Add(line);
+                        listOfObjects.Items.Add(vd.ParametersToString(line));
+                        p1 = p;
+                        p2 = p;
+                    }
+                if (shape == Shapes.Ellipse)
+                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    else if (p2 == p)
+                    {
+                        p2 = Mouse.GetPosition(canvasGrid);
+                        Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        ellipse.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                        canvasGrid.Children.Add(ellipse);
+                        shapes.Add(ellipse);
+                        listOfObjects.Items.Add(vd.ParametersToString(ellipse));
+                        p1 = p;
+                        p2 = p;
+                    }
+                if (shape == Shapes.Rectangle)
+                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    else if (p2 == p)
+                    {
+                        p2 = Mouse.GetPosition(canvasGrid);
+                        Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        rectangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                        canvasGrid.Children.Add(rectangle);
+                        shapes.Add(rectangle);
+                        listOfObjects.Items.Add(vd.ParametersToString(rectangle));
+                        p1 = p;
+                        p2 = p;
+                    }
+                if (shape == Shapes.Triangle)
+                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    else if (p2 == p)
+                    {
+                        p2 = Mouse.GetPosition(canvasGrid);
+                        Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        triangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                        canvasGrid.Children.Add(triangle);
+                        shapes.Add(triangle);
+                        listOfObjects.Items.Add(vd.ParametersToString(triangle));
+                        p1 = p;
+                        p2 = p;
+                    }
+            }
+        }
+
+        private void shape_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (editMode) {
+                int index = shapes.IndexOf((Shape)sender);
+                shapes[index].Fill = Brushes.Red;
+            }
         }
     }
 }
