@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 
 namespace MMDB
 {
+    enum Shapes { None, Line, Ellipse, Rectangle, Triangle}
     class VectorDraw
     {
         public Line CreateLine(Point p1, Point p2, int strokeThickness, Brush color)
@@ -119,6 +120,41 @@ namespace MMDB
                 + "stroke=" + ellipse.StrokeThickness + ", "
                 + "brush=" + ellipse.Stroke + ", "
                 + "fill=" + ellipse.Fill;
+        }
+
+        public String ParametersToString(Rectangle rectangle)
+        {
+            return "rectangle: p1=("
+                + rectangle.Margin.Left + ","
+                + (rectangle.Margin.Top + rectangle.Height) + "), "
+                + "p2=("
+                + (rectangle.Margin.Left + rectangle.Width) + ","
+                + (rectangle.Margin.Top + rectangle.Height) + "), "
+                + "p3=("
+                + (rectangle.Margin.Left + rectangle.Width) + ","
+                + rectangle.Margin.Top + "), "
+                + "p4=("
+                + rectangle.Margin.Left + ","
+                + rectangle.Margin.Top + "), "
+                + "stroke=" + rectangle.StrokeThickness + ", "
+                + "brush=" + rectangle.Stroke + ", "
+                + "fill=" + rectangle.Fill;
+        }
+
+        public String ParametersToString(Polygon triangle)
+        {
+            return "triangle: p1=("
+                + triangle.Points[0].X + ","
+                + triangle.Points[0].Y + "), "
+                + "p2=("
+                + triangle.Points[1].X + ","
+                + triangle.Points[1].Y + "), "
+                + "p3=("
+                + triangle.Points[2].X + ","
+                + triangle.Points[2].Y + "), "
+                + "stroke=" + triangle.StrokeThickness + ", "
+                + "brush=" + triangle.Stroke + ", "
+                + "fill=" + triangle.Fill;
         }
     }
 }

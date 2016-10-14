@@ -19,7 +19,7 @@
             <Image x:Name="canvas" Height="50" Margin="0" Width="50"/>
         </Canvas>
         <Button x:Name="lineButton" Content="Line" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="lineButton_Click"/>
-        <Button x:Name="circleButton" Content="Circle" HorizontalAlignment="Left" Margin="10,197,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="circleButton_Click"/>
+        <Button x:Name="ellipseButton" Content="Ellipse" HorizontalAlignment="Left" Margin="10,197,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="ellipseButton_Click"/>
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
         <Button x:Name="rectangleButton" Content="Rectangle" HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="rectangleButton_Click"/>
         <Button x:Name="triangleButton" Content="Triangle" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="triangleButton_Click"/>

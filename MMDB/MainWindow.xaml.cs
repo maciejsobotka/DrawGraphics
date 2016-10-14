@@ -25,10 +25,7 @@ namespace MMDB
         private string imgPath = "";
         private bool imageLoaded = false;
         private bool imageNew = false;
-        private bool drawLine = false;
-        private bool drawCircle = false;
-        private bool drawRectangle = false;
-        private bool drawTriangle = false;
+        private Shapes shape = Shapes.None;
         private Point p;
         private Point p1;
         private Point p2;
@@ -168,7 +165,7 @@ namespace MMDB
             //changePixelButton.IsEnabled = true;
             //avgColorButton.IsEnabled = true;
             lineButton.IsEnabled = true;
-            circleButton.IsEnabled = true;
+            ellipseButton.IsEnabled = true;
             rectangleButton.IsEnabled = true;
             triangleButton.IsEnabled = true;
         }
@@ -233,48 +230,35 @@ namespace MMDB
         // Vector graphics
         private void lineButton_Click(object sender, RoutedEventArgs e)
         {
-            drawLine = true;
-            drawCircle = false;
-            drawRectangle = false;
-
+            shape = Shapes.Line;
             p1 = p;
             p2 = p;
         }
 
-        private void circleButton_Click(object sender, RoutedEventArgs e)
+        private void ellipseButton_Click(object sender, RoutedEventArgs e)
         {
-            drawCircle = true;
-            drawLine = false;
-            drawRectangle = false;
-
+            shape = Shapes.Ellipse;
             p1 = p;
             p2 = p;
         }
 
         private void rectangleButton_Click(object sender, RoutedEventArgs e)
         {
-            drawRectangle = true;
-            drawLine = false;
-            drawCircle = false;
-
+            shape = Shapes.Rectangle;
             p1 = p;
             p2 = p;
         }
 
         private void triangleButton_Click(object sender, RoutedEventArgs e)
         {
-            drawTriangle = true;
-            drawLine = false;
-            drawCircle = false;
-            drawRectangle = false;
-
+            shape = Shapes.Triangle;
             p1 = p;
             p2 = p;
         }
 
         private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(drawLine)
+            if(shape == Shapes.Line)
                 if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
                 else if (p2 == p)
                 {
@@ -286,7 +270,7 @@ namespace MMDB
                     p1 = p;
                     p2 = p;        
                 }
-            if(drawCircle)
+            if (shape == Shapes.Ellipse)
                 if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
                 else if (p2 == p)
                 {
@@ -298,7 +282,7 @@ namespace MMDB
                     p1 = p;
                     p2 = p;
                 }
-            if(drawRectangle)
+            if (shape == Shapes.Rectangle)
                 if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
                 else if (p2 == p)
                 {
@@ -306,11 +290,11 @@ namespace MMDB
                     Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
                     canvasGrid.Children.Add(rectangle);
                     shapes.Add(rectangle);
-                    listOfObjects.Items.Add(rectangle.ToString());
+                    listOfObjects.Items.Add(vd.ParametersToString(rectangle));
                     p1 = p;
                     p2 = p;
                 }
-            if(drawTriangle)
+            if (shape == Shapes.Triangle)
                 if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
                 else if (p2 == p)
                 {
@@ -318,7 +302,7 @@ namespace MMDB
                     Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
                     canvasGrid.Children.Add(triangle);
                     shapes.Add(triangle);
-                    listOfObjects.Items.Add(triangle.ToString());
+                    listOfObjects.Items.Add(vd.ParametersToString(triangle));
                     p1 = p;
                     p2 = p;
                 }
