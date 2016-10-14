@@ -27,6 +27,8 @@ namespace MMDB
         private bool imageNew = false;
         private bool drawLine = false;
         private bool drawCircle = false;
+        private bool drawRectangle = false;
+        private bool drawTriangle = false;
         private Point p;
         private Point p1;
         private Point p2;
@@ -167,6 +169,8 @@ namespace MMDB
             //avgColorButton.IsEnabled = true;
             lineButton.IsEnabled = true;
             circleButton.IsEnabled = true;
+            rectangleButton.IsEnabled = true;
+            triangleButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -231,6 +235,8 @@ namespace MMDB
         {
             drawLine = true;
             drawCircle = false;
+            drawRectangle = false;
+
             p1 = p;
             p2 = p;
         }
@@ -239,6 +245,29 @@ namespace MMDB
         {
             drawCircle = true;
             drawLine = false;
+            drawRectangle = false;
+
+            p1 = p;
+            p2 = p;
+        }
+
+        private void rectangleButton_Click(object sender, RoutedEventArgs e)
+        {
+            drawRectangle = true;
+            drawLine = false;
+            drawCircle = false;
+
+            p1 = p;
+            p2 = p;
+        }
+
+        private void triangleButton_Click(object sender, RoutedEventArgs e)
+        {
+            drawTriangle = true;
+            drawLine = false;
+            drawCircle = false;
+            drawRectangle = false;
+
             p1 = p;
             p2 = p;
         }
@@ -257,14 +286,42 @@ namespace MMDB
                     p1 = p;
                     p2 = p;        
                 }
-            if(drawCircle){
-                p1 = Mouse.GetPosition(canvasGrid);
-                Ellipse circle = vd.CreateEllipse(p1, 50, 50, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue, canvasGrid.ActualWidth, canvasGrid.ActualHeight);
-                canvasGrid.Children.Add(circle);
-                listOfObjects.Items.Add(vd.ParametersToString(circle));
-                  
+            if(drawCircle)
+                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                else if (p2 == p)
+                {
+                    p2 = Mouse.GetPosition(canvasGrid);
+                    Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
+                    canvasGrid.Children.Add(ellipse);
+                    shapes.Add(ellipse);
+                    listOfObjects.Items.Add(vd.ParametersToString(ellipse));
+                    p1 = p;
+                    p2 = p;
+                }
+            if(drawRectangle)
+                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                else if (p2 == p)
+                {
+                    p2 = Mouse.GetPosition(canvasGrid);
+                    Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
+                    canvasGrid.Children.Add(rectangle);
+                    shapes.Add(rectangle);
+                    listOfObjects.Items.Add(rectangle.ToString());
+                    p1 = p;
+                    p2 = p;
+                }
+            if(drawTriangle)
+                if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                else if (p2 == p)
+                {
+                    p2 = Mouse.GetPosition(canvasGrid);
+                    Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.LightSteelBlue, Brushes.LightSteelBlue);
+                    canvasGrid.Children.Add(triangle);
+                    shapes.Add(triangle);
+                    listOfObjects.Items.Add(triangle.ToString());
+                    p1 = p;
+                    p2 = p;
                 }
         }
-
     }
 }

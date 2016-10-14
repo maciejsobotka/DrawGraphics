@@ -21,5 +21,7 @@
         <Button x:Name="lineButton" Content="Line" HorizontalAlignment="Left" Margin="10,170,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="lineButton_Click"/>
         <Button x:Name="circleButton" Content="Circle" HorizontalAlignment="Left" Margin="10,197,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="circleButton_Click"/>
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
+        <Button x:Name="rectangleButton" Content="Rectangle" HorizontalAlignment="Left" Margin="10,224,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="rectangleButton_Click"/>
+        <Button x:Name="triangleButton" Content="Triangle" HorizontalAlignment="Left" Margin="10,251,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="triangleButton_Click"/>
     </Grid>
 </Window>

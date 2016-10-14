@@ -24,22 +24,81 @@ namespace MMDB
             return line;
         }
 
-        public Ellipse CreateEllipse(Point p1,int width, int height, int strokeThickness, Brush strokeBrush, Brush fillBrush, double parentWidth, double parentHeight)
+        public Ellipse CreateEllipse(Point p1,Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
         {
             Ellipse ellipse = new Ellipse();
-            ellipse.Height = height;
-            ellipse.Width = width;
+            ellipse.Height = Math.Abs(p1.Y - p2.Y);
+            ellipse.Width = Math.Abs(p1.X - p2.X);
             ellipse.StrokeThickness = strokeThickness;
             ellipse.Stroke = strokeBrush;
             ellipse.Fill = fillBrush;
-            double leftMargin = p1.X - width / 2;
-            double topMargin = p1.Y - height / 2;
-            if (leftMargin < 0) leftMargin = 0;
-            if (leftMargin > parentWidth - width) leftMargin = parentWidth - width;
-            if (topMargin < 0) topMargin = 0;
-            if (topMargin > parentHeight - height) topMargin = parentHeight - height;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X) leftMargin = p2.X;
+            if (p1.Y > p2.Y) topMargin = p2.Y;
             ellipse.Margin = new Thickness(leftMargin, topMargin, 0, 0);
+
             return ellipse;
+        }
+
+        public Rectangle CreateRectangle(Point p1, Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
+        {
+            Rectangle rectangle = new Rectangle();
+            rectangle.Height = Math.Abs(p1.Y - p2.Y);
+            rectangle.Width = Math.Abs(p1.X - p2.X);
+            rectangle.StrokeThickness = strokeThickness;
+            rectangle.Stroke = strokeBrush;
+            rectangle.Fill = fillBrush;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X) leftMargin = p2.X;
+            if (p1.Y > p2.Y) topMargin = p2.Y;
+            rectangle.Margin = new Thickness(leftMargin, topMargin, 0, 0);
+
+            return rectangle;
+        }
+
+        public Polygon CreateTriangle(Point p1, Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
+        {
+            Polygon triangle = new Polygon();
+            Point t1, t2, t3;
+            triangle.StrokeThickness = strokeThickness;
+            triangle.Stroke = strokeBrush;
+            triangle.Fill = fillBrush;
+            if(p1.X < p2.X)                         // p1 left
+                if(p1.Y > p2.Y)                     // p1 bottom left
+                {
+                    t1 = new Point(p1.X, p1.Y);
+                    t2 = new Point(p1.X + (p2.X - p1.X)/2, p2.Y);
+                    t3 = new Point(p2.X, p1.Y);
+                }
+                else
+                {                                   // p1 top left
+                    t1 = new Point(p1.X, p2.Y);
+                    t2 = new Point(p1.X + (p2.X - p1.X) / 2, p1.Y);
+                    t3 = new Point(p2.X, p2.Y);
+                }
+            else                                    // p2 left
+                if (p1.Y > p2.Y)                    // p2 top left      
+                {
+                    t1 = new Point(p2.X, p1.Y);
+                    t2 = new Point(p2.X + (p1.X - p2.X) / 2, p2.Y);
+                    t3 = new Point(p1.X, p1.Y);
+                }
+                else
+                {                                   // p2 bottom left
+                    t1 = new Point(p2.X, p2.Y);
+                    t2 = new Point(p2.X + (p1.X - p2.X) / 2, p1.Y);
+                    t3 = new Point(p1.X, p2.Y);
+                }
+
+            PointCollection trianglePoints = new PointCollection();
+            trianglePoints.Add(t1);
+            trianglePoints.Add(t2);
+            trianglePoints.Add(t3);
+            triangle.Points = trianglePoints;
+
+            return triangle;
         }
 
         public String ParametersToString(Line line)
