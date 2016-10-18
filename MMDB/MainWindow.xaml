@@ -22,5 +22,8 @@
         <Button x:Name="rectangleButton" Content="Rectangle" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="rectangleButton_Click"/>
         <Button x:Name="triangleButton" Content="Triangle" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="triangleButton_Click"/>
         <Button x:Name="editButton" Content="Edit" HorizontalAlignment="Left" Height="25" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="editButton_Click"/>
+        <Button x:Name="redB" Content="R" HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="redB_Click"/>
+        <Button x:Name="greenB" Content="G" HorizontalAlignment="Left" Margin="35,452,0,0" VerticalAlignment="Top" Width="20" Click="greenB_Click"/>
+        <Button x:Name="blueB" Content="B" HorizontalAlignment="Left" Margin="60,452,0,0" VerticalAlignment="Top" Width="20" Click="blueB_Click"/>
     </Grid>
 </Window>

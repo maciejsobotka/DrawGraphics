@@ -32,12 +32,14 @@ namespace MMDB
         private VectorDraw vd;
         private List<Shape> shapes;
         private bool editMode = false;
+        private Brush color;
         
         public MainWindow()
         {
             InitializeComponent();
             vd = new VectorDraw();
             shapes = new List<Shape>();
+            color = Brushes.LightSteelBlue;
             p.X = 0.0;
             p.Y = 0.0;
         }
@@ -280,8 +282,23 @@ namespace MMDB
         {
             if (editMode) {
                 int index = shapes.IndexOf((Shape)sender);
-                shapes[index].Fill = Brushes.Red;
+                shapes[index].Fill = color;
             }
+        }
+
+        private void redB_Click(object sender, RoutedEventArgs e)
+        {
+            color = Brushes.Red;
+        }
+
+        private void greenB_Click(object sender, RoutedEventArgs e)
+        {
+            color = Brushes.Green;
+        }
+
+        private void blueB_Click(object sender, RoutedEventArgs e)
+        {
+            color = Brushes.Blue;
         }
     }
 }
