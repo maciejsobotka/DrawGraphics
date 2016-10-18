@@ -26,12 +26,12 @@ namespace MMDB
         private bool imageLoaded = false;
         private bool imageNew = false;
         private Shapes shape = Shapes.None;
+        private Operations operation = Operations.None;
         private Point p;
         private Point p1;
         private Point p2;
         private VectorDraw vd;
         private List<Shape> shapes;
-        private bool editMode = false;
         private Brush color;
         
         public MainWindow()
@@ -39,7 +39,7 @@ namespace MMDB
             InitializeComponent();
             vd = new VectorDraw();
             shapes = new List<Shape>();
-            color = Brushes.LightSteelBlue;
+            color = Brushes.White;
             p.X = 0.0;
             p.Y = 0.0;
         }
@@ -89,25 +89,16 @@ namespace MMDB
             EnableButtons();
         }
 
-        private void newFile_MouseEnter(object sender, MouseEventArgs e)
+        private void menuOption_MouseEnter(object sender, MouseEventArgs e)
         {
             newFile.Foreground = Brushes.Black;
         }
 
-        private void newFile_MouseLeave(object sender, MouseEventArgs e)
+        private void menuOption_MouseLeave(object sender, MouseEventArgs e)
         {
             newFile.Foreground = Brushes.White;
         }
 
-        private void openFile_MouseEnter(object sender, MouseEventArgs e)
-        {
-            openFile.Foreground = Brushes.Black;
-        }
-
-        private void openFile_MouseLeave(object sender, MouseEventArgs e)
-        {
-            openFile.Foreground = Brushes.White;
-        }
         //=====================================================================
         // Load image
         private void ShowImage()
@@ -165,13 +156,11 @@ namespace MMDB
         }
         private void EnableButtons()
         {
-            //changePixelButton.IsEnabled = true;
-            //avgColorButton.IsEnabled = true;
             lineButton.IsEnabled = true;
             ellipseButton.IsEnabled = true;
             rectangleButton.IsEnabled = true;
             triangleButton.IsEnabled = true;
-            editButton.IsEnabled = true;
+            paintButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -183,45 +172,40 @@ namespace MMDB
 
         //=====================================================================
         // Options management
-        private void lineButton_Click(object sender, RoutedEventArgs e)
+        private void shapeButton_Click(object sender, RoutedEventArgs e)
         {
-            shape = Shapes.Line;
+            Button senderButton = (Button)sender;
+
+            switch (senderButton.Name)
+            {
+                case "lineButton":
+                    shape = Shapes.Line;
+                    break;
+                case "ellipseButton":
+                    shape = Shapes.Ellipse;
+                    break;
+                case "rectangleButton":
+                    shape = Shapes.Rectangle;
+                    break;
+                case "triangleButton":
+                    shape = Shapes.Triangle;
+                    break;
+            }
+            operation = Operations.None;
             p1 = p;
             p2 = p;
         }
 
-        private void ellipseButton_Click(object sender, RoutedEventArgs e)
+        private void paintButton_Click(object sender, RoutedEventArgs e)
         {
-            shape = Shapes.Ellipse;
-            p1 = p;
-            p2 = p;
-        }
-
-        private void rectangleButton_Click(object sender, RoutedEventArgs e)
-        {
-            shape = Shapes.Rectangle;
-            p1 = p;
-            p2 = p;
-        }
-
-        private void triangleButton_Click(object sender, RoutedEventArgs e)
-        {
-            shape = Shapes.Triangle;
-            p1 = p;
-            p2 = p;
-        }
-
-        private void editButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (editMode) editMode = false;
-            else editMode = true;
+            operation = Operations.Paint;
         }
 
         //=====================================================================
         // Vector graphics
         private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (!editMode)
+            if (operation == Operations.None)
             {
                 if (shape == Shapes.Line)
                     if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
@@ -241,7 +225,7 @@ namespace MMDB
                     else if (p2 == p)
                     {
                         p2 = Mouse.GetPosition(canvasGrid);
-                        Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.Black, color);
                         ellipse.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
                         canvasGrid.Children.Add(ellipse);
                         shapes.Add(ellipse);
@@ -254,7 +238,7 @@ namespace MMDB
                     else if (p2 == p)
                     {
                         p2 = Mouse.GetPosition(canvasGrid);
-                        Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.Black, color);
                         rectangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
                         canvasGrid.Children.Add(rectangle);
                         shapes.Add(rectangle);
@@ -267,7 +251,7 @@ namespace MMDB
                     else if (p2 == p)
                     {
                         p2 = Mouse.GetPosition(canvasGrid);
-                        Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.Black, Brushes.LightSteelBlue);
+                        Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.Black, color);
                         triangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
                         canvasGrid.Children.Add(triangle);
                         shapes.Add(triangle);
@@ -280,30 +264,37 @@ namespace MMDB
 
         private void shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (editMode) {
+            if (operation == Operations.Paint) {
                 int index = shapes.IndexOf((Shape)sender);
                 shapes[index].Fill = color;
             }
         }
 
-        private void redB_Click(object sender, RoutedEventArgs e)
-        {
-            color = Brushes.Red;
-        }
-
-        private void greenB_Click(object sender, RoutedEventArgs e)
-        {
-            color = Brushes.Green;
-        }
-
-        private void blueB_Click(object sender, RoutedEventArgs e)
-        {
-            color = Brushes.Blue;
-        }
-
         private void colorButton_Click(object sender, RoutedEventArgs e)
         {
-            color = Brushes.Wheat;
+            Button senderButton = (Button)sender;
+
+            switch (senderButton.Name)
+            {
+                case "whiteButton":
+                    color = Brushes.White;
+                    break;
+                case "grayButton":
+                    color = Brushes.Gray;
+                    break;
+                case "blackButton":
+                    color = Brushes.Black;
+                    break;
+                case "redButton":
+                    color = Brushes.Red;
+                    break;
+                case "greenButton":
+                    color = Brushes.Green;
+                    break;
+                case "blueButton":
+                    color = Brushes.Blue;
+                    break;
+            }
         }
     }
 }
