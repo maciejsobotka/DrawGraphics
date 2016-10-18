@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
@@ -56,6 +59,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="VectorDraw.cs" />
+    <Page Include="FunctionButtonsDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -99,6 +106,33 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\black.png" />
+    <Resource Include="content\blue.png" />
+    <Resource Include="content\gray.png" />
+    <Resource Include="content\green.png" />
+    <Resource Include="content\red.png" />
+    <Resource Include="content\white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\ellipse.png" />
+    <Resource Include="content\line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\rectangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\triangle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\icon_small.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

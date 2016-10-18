@@ -300,5 +300,10 @@ namespace MMDB
         {
             color = Brushes.Blue;
         }
+
+        private void colorButton_Click(object sender, RoutedEventArgs e)
+        {
+            color = Brushes.Wheat;
+        }
     }
 }

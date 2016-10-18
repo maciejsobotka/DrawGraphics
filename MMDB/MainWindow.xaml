@@ -2,7 +2,19 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="MMDB.MainWindow"
-        Title="MMDB" Height="764" Width="1024" Background="#FFA8A8A8">
+        Title="MMDB" Height="764" Width="1024" Background="#FFA8A8A8" Icon="/content/icon_small.ico">
+    <Window.Resources>
+        <Image x:Key="black" Source="/content/black.png"/>
+        <Image x:Key="gray" Source="/content/gray.png"/>
+        <Image x:Key="white" Source="/content/white.png"/>
+        <Image x:Key="red" Source="/content/red.png"/>
+        <Image x:Key="green" Source="/content/green.png"/>
+        <Image x:Key="blue" Source="/content/blue.png"/>
+        <Image x:Key="line" Source="/content/line.png"/>
+        <Image x:Key="ellipse" Source="/content/ellipse.png"/>
+        <Image x:Key="rectangle" Source="/content/rectangle.png"/>
+        <Image x:Key="triangle" Source="/content/triangle.png"/>
+    </Window.Resources>
     <Grid x:Name="grid">
         <Menu Width="Auto" Height="24" VerticalAlignment="Top" Foreground="White" Background="Black">
             <MenuItem x:Name="fileMenu" Header="File" Background="Black" Style="{DynamicResource MenuItemStyle}">
@@ -16,14 +28,17 @@
         <Canvas x:Name="canvasGrid" Margin="125,25,300,23" MouseDown="canvasGrid_MouseDown">
             <Image x:Name="canvas" Height="50" Margin="0" Width="50"/>
         </Canvas>
-        <Button x:Name="lineButton" Content="Line" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="lineButton_Click"/>
-        <Button x:Name="ellipseButton" Content="Ellipse" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="ellipseButton_Click"/>
+        <Button x:Name="lineButton" Content="{StaticResource line}" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="lineButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="ellipseButton" Content="{StaticResource ellipse}" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="ellipseButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
-        <Button x:Name="rectangleButton" Content="Rectangle" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="rectangleButton_Click"/>
-        <Button x:Name="triangleButton" Content="Triangle" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="triangleButton_Click"/>
+        <Button x:Name="rectangleButton" Content="{StaticResource rectangle}" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="rectangleButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="triangleButton" Content="{StaticResource triangle}" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="triangleButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <Button x:Name="editButton" Content="Edit" HorizontalAlignment="Left" Height="25" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="editButton_Click"/>
-        <Button x:Name="redB" Content="R" HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="redB_Click"/>
-        <Button x:Name="greenB" Content="G" HorizontalAlignment="Left" Margin="35,452,0,0" VerticalAlignment="Top" Width="20" Click="greenB_Click"/>
-        <Button x:Name="blueB" Content="B" HorizontalAlignment="Left" Margin="60,452,0,0" VerticalAlignment="Top" Width="20" Click="blueB_Click"/>
+        <Button x:Name="whiteB" Content="{StaticResource white}"  HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="blackB" Content="{StaticResource black}" HorizontalAlignment="Left" Margin="34,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="grayB" Content="{StaticResource gray}" HorizontalAlignment="Left" Margin="58,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="redB" Content="{StaticResource red}"  HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="20" Click="redB_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="greenB" Content="{StaticResource green}" HorizontalAlignment="Left" Margin="34,476,0,0" VerticalAlignment="Top" Width="20" Click="greenB_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="blueB" Content="{StaticResource blue}" HorizontalAlignment="Left" Margin="58,476,0,0" VerticalAlignment="Top" Width="20" Click="blueB_Click" Style="{DynamicResource ButtonStyle}"/>
     </Grid>
 </Window>
