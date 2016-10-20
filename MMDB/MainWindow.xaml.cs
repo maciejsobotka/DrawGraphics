@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -22,23 +23,21 @@ namespace MMDB
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string imgPath = "";
-        private bool imageLoaded = false;
-        private bool imageNew = false;
+        private string graphicPath = "";
+        private bool graphicLoaded = false;
+        private bool graphicNew = false;
         private Shapes shape = Shapes.None;
         private Operations operation = Operations.None;
         private Point p;
         private Point p1;
         private Point p2;
         private VectorDraw vd;
-        private List<Shape> shapes;
         private Brush color;
         
         public MainWindow()
         {
             InitializeComponent();
             vd = new VectorDraw();
-            shapes = new List<Shape>();
             color = Brushes.White;
             p.X = 0.0;
             p.Y = 0.0;
@@ -48,112 +47,104 @@ namespace MMDB
         // Menu
         private void NewFile_Click(object sender, EventArgs e)
         {
-            if (imageLoaded || imageNew)
+            if (graphicLoaded || graphicNew)
             {
-                canvas.Source = null;
                 ClearObjects();
                 textBoxSource.Text = "New File";
             }
-            canvasGrid.Background = Brushes.White;
-            imageNew = true;
-            imageLoaded = false;
+            canvas.Background = Brushes.White;
+            graphicNew = true;
+            graphicLoaded = false;
             textBoxSource.Text = "";
             textBoxSource.Foreground = Brushes.Black;
             textBoxSource.FontStyle = FontStyles.Normal;
             textBoxSource.Text = "New File";
             EnableButtons();
+            saveFile.Foreground = Brushes.White;
         }
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog dlg = new OpenFileDialog();
-            dlg.Filter = "JPEG |*.JPG;*.JPEG";
+            dlg.Filter = "XAML |*.XAML";
             dlg.Multiselect = false;  // default
             dlg.ShowDialog();
-            imgPath = dlg.FileName;
+            graphicPath = dlg.FileName;
             
             textBoxSource.Text = "";
             textBoxSource.Foreground = Brushes.Black;
             textBoxSource.FontStyle = FontStyles.Normal;
             textBoxSource.Text = dlg.SafeFileName;
 
-            if (imageNew || imageLoaded)
+            if (graphicNew || graphicLoaded)
             {
-                canvasGrid.Background = null;
                 ClearObjects();
-                canvasGrid.Children.Add(canvas);
             }
-            ShowImage();
-            imageLoaded = true;
-            imageNew = false;
+            canvas.Background = Brushes.White;
+            graphicLoaded = true;
+            graphicNew = false;
             EnableButtons();
+
+            FileStream file = new FileStream(graphicPath, FileMode.Open);
+            Canvas c = (Canvas) XamlReader.Load(file);
+            while (c.Children.Count > 0)
+            {
+                Shape s = (Shape) c.Children[0];
+                s.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                listOfObjects.Items.Add(vd.ParametersToString(s));
+                c.Children.RemoveAt(0);
+                canvas.Children.Add(s);
+            }
+            textBoxSource.Text = canvas.Children[0].ToString();
+
+            saveFile.Foreground = Brushes.White;
+        }
+
+        private void SaveFile_Click(object sender, EventArgs e)
+        {
+            FileStream file = new FileStream("graphic.xaml", FileMode.Create, FileAccess.Write);
+            XamlWriter.Save(canvas, file);
+            foreach (var shape in canvas.Children)
+                XamlWriter.Save(shape);
+            file.Close();
         }
 
         private void menuOption_MouseEnter(object sender, MouseEventArgs e)
         {
-            newFile.Foreground = Brushes.Black;
+            MenuItem menuItem = (MenuItem)sender;
+            switch (menuItem.Name)
+            {
+                case "newFile":
+                    newFile.Foreground = Brushes.Black;
+                    break;
+                case "openFile":
+                    openFile.Foreground = Brushes.Black;
+                    break;
+                case "saveFile":
+                    if (graphicNew || graphicLoaded)
+                        saveFile.Foreground = Brushes.Black;
+                    break;
+            }
         }
 
         private void menuOption_MouseLeave(object sender, MouseEventArgs e)
         {
-            newFile.Foreground = Brushes.White;
-        }
-
-        //=====================================================================
-        // Load image
-        private void ShowImage()
-        {
-            if (File.Exists(imgPath))
+            MenuItem menuItem = (MenuItem)sender;
+            switch (menuItem.Name)
             {
-                SetImage(imgPath);
+                case "newFile":
+                    newFile.Foreground = Brushes.White;
+                    break;
+                case "openFile":
+                    openFile.Foreground = Brushes.White;
+                    break;
+                case "saveFile":
+                    if(graphicNew || graphicLoaded)
+                        saveFile.Foreground = Brushes.White;
+                    break;
             }
-            else
-                MessageBox.Show("Incorrect file path!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
-        public void SetImage(string imgPath)
-        {
-            BitmapImage img = new BitmapImage(new Uri(imgPath));
-            SetCanvasSize(img.PixelWidth, img.PixelHeight);
-            canvas.Source = img;
-        }
-
-        public void SetImage(int width, int height, double dpiX, double dpiY, PixelFormat pf, byte[] pixels, int stride)
-        {
-            BitmapSource img = BitmapSource.Create(
-                width,
-                height,
-                dpiX,
-                dpiY,
-                pf,
-                /* palette: */ null,
-                pixels,
-                stride);
-            SetCanvasSize(img.PixelWidth, img.PixelHeight);
-            canvas.Source = img;
-        }
-
-        private void SetCanvasSize(int pixelWidth, int pixelHeight)
-        {
-            canvas.Height = 600;
-            canvas.Width = 600;
-            if (pixelHeight > pixelWidth)
-                if (canvas.Height > pixelHeight)
-                {
-                    canvas.Height = pixelHeight;
-                    canvas.Width = pixelWidth;
-                }
-                else
-                    canvas.Width = (Height / pixelHeight) * pixelWidth;
-            if (pixelHeight < pixelWidth)
-                if (canvas.Width > pixelWidth)
-                {
-                    canvas.Height = pixelHeight;
-                    canvas.Width = pixelWidth;
-                }
-                else
-                    canvas.Height = (Width / pixelWidth) * pixelHeight;
-        }
         private void EnableButtons()
         {
             lineButton.IsEnabled = true;
@@ -165,8 +156,7 @@ namespace MMDB
 
         private void ClearObjects()
         {
-            canvasGrid.Children.Clear();
-            shapes.Clear();
+            canvas.Children.Clear();
             listOfObjects.Items.Clear();
         }
 
@@ -203,58 +193,54 @@ namespace MMDB
 
         //=====================================================================
         // Vector graphics
-        private void canvasGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (operation == Operations.None)
             {
                 if (shape == Shapes.Line)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
                     else if (p2 == p)
                     {
-                        p2 = Mouse.GetPosition(canvasGrid);
+                        p2 = Mouse.GetPosition(canvas);
                         Line line = vd.CreateLine(p1, p2, 2, Brushes.Black);
                         line.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvasGrid.Children.Add(line);
-                        shapes.Add(line);
+                        canvas.Children.Add(line);
                         listOfObjects.Items.Add(vd.ParametersToString(line));
                         p1 = p;
                         p2 = p;
                     }
                 if (shape == Shapes.Ellipse)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
                     else if (p2 == p)
                     {
-                        p2 = Mouse.GetPosition(canvasGrid);
+                        p2 = Mouse.GetPosition(canvas);
                         Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.Black, color);
                         ellipse.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvasGrid.Children.Add(ellipse);
-                        shapes.Add(ellipse);
+                        canvas.Children.Add(ellipse);
                         listOfObjects.Items.Add(vd.ParametersToString(ellipse));
                         p1 = p;
                         p2 = p;
                     }
                 if (shape == Shapes.Rectangle)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
                     else if (p2 == p)
                     {
-                        p2 = Mouse.GetPosition(canvasGrid);
+                        p2 = Mouse.GetPosition(canvas);
                         Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.Black, color);
                         rectangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvasGrid.Children.Add(rectangle);
-                        shapes.Add(rectangle);
+                        canvas.Children.Add(rectangle);
                         listOfObjects.Items.Add(vd.ParametersToString(rectangle));
                         p1 = p;
                         p2 = p;
                     }
                 if (shape == Shapes.Triangle)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvasGrid);
+                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
                     else if (p2 == p)
                     {
-                        p2 = Mouse.GetPosition(canvasGrid);
+                        p2 = Mouse.GetPosition(canvas);
                         Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.Black, color);
                         triangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvasGrid.Children.Add(triangle);
-                        shapes.Add(triangle);
+                        canvas.Children.Add(triangle);
                         listOfObjects.Items.Add(vd.ParametersToString(triangle));
                         p1 = p;
                         p2 = p;
@@ -265,8 +251,8 @@ namespace MMDB
         private void shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (operation == Operations.Paint) {
-                int index = shapes.IndexOf((Shape)sender);
-                shapes[index].Fill = color;
+                int index = canvas.Children.IndexOf((Shape)sender);
+                ((Shape) canvas.Children[index]).Fill = color;
             }
         }
 

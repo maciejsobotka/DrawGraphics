@@ -22,14 +22,15 @@
             <MenuItem x:Name="fileMenu" Header="File" Background="Black" Style="{DynamicResource MenuItemStyle}">
                 <MenuItem x:Name="newFile" Header="New..." Foreground="White" Background="Black" Click="NewFile_Click" InputGestureText="Ctrl+N" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave" BorderBrush="Black"/>
                 <MenuItem x:Name="openFile" Header="Open..." Foreground="White" Background="Black" Click="OpenFile_Click" InputGestureText="Ctrl+O" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave"/>
+                <Separator Style="{DynamicResource SeparatorStyle}"/>
+                <MenuItem x:Name="saveFile" Header="Save..." Foreground="Gray" Background="Black" Click="SaveFile_Click" InputGestureText="Ctrl+S" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave"/>
 
             </MenuItem>
         </Menu>
         <Rectangle x:Name="colorRectangle" HorizontalAlignment="Left" Height="22" Margin="10,425,0,0" VerticalAlignment="Top" Width="68"/>
         <TextBox x:Name="textBoxSource" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="229" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
-        <Canvas x:Name="canvasGrid" Margin="125,25,300,23" MouseDown="canvasGrid_MouseDown">
-            <Image x:Name="canvas" Height="50" Margin="0" Width="50"/>
-        </Canvas>
+        <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown"/>
+
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
 
         <Button x:Name="lineButton" Content="{StaticResource line}" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>

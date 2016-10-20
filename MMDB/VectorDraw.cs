@@ -103,29 +103,32 @@ namespace MMDB
             return triangle;
         }
 
-        public String ParametersToString(Line line)
+        public String ParametersToString(Shape shape)
         {
-            return "line: p1=(" + line.X1 + "," + line.Y1 + "), "
-                + "p2=(" + line.X2 + "," + line.Y2 + "), "
-                + "stroke=" + line.StrokeThickness + ", "
-                + "brush=" + line.Stroke;
-        }
-
-        public String ParametersToString(Ellipse ellipse)
-        {
-            return "ellipse: p=("
-                + (ellipse.Margin.Left + ellipse.Width/2) + ","
-                + (ellipse.Margin.Top + ellipse.Height/2) + "), "
-                + "width=" + ellipse.Width + ", "
-                + "height=" + ellipse.Height + ", "
-                + "stroke=" + ellipse.StrokeThickness + ", "
-                + "brush=" + ellipse.Stroke + ", "
-                + "fill=" + ellipse.Fill;
-        }
-
-        public String ParametersToString(Rectangle rectangle)
-        {
-            return "rectangle: p1=("
+            if(shape is Line)
+            {
+                Line line = shape as Line;
+                return "line: p1=(" + line.X1 + "," + line.Y1 + "), "
+                    + "p2=(" + line.X2 + "," + line.Y2 + "), "
+                    + "stroke=" + line.StrokeThickness + ", "
+                    + "brush=" + line.Stroke;
+            }
+            if (shape is Ellipse)
+            {
+                Ellipse ellipse = shape as Ellipse;
+                return "ellipse: p=("
+                    + (ellipse.Margin.Left + ellipse.Width / 2) + ","
+                    + (ellipse.Margin.Top + ellipse.Height / 2) + "), "
+                    + "width=" + ellipse.Width + ", "
+                    + "height=" + ellipse.Height + ", "
+                    + "stroke=" + ellipse.StrokeThickness + ", "
+                    + "brush=" + ellipse.Stroke + ", "
+                    + "fill=" + ellipse.Fill;
+            }
+            if(shape is Rectangle)
+            {
+                Rectangle rectangle = shape as Rectangle;
+                return "rectangle: p1=("
                 + rectangle.Margin.Left + ","
                 + (rectangle.Margin.Top + rectangle.Height) + "), "
                 + "p2=("
@@ -140,22 +143,24 @@ namespace MMDB
                 + "stroke=" + rectangle.StrokeThickness + ", "
                 + "brush=" + rectangle.Stroke + ", "
                 + "fill=" + rectangle.Fill;
-        }
-
-        public String ParametersToString(Polygon triangle)
-        {
-            return "triangle: p1=("
-                + triangle.Points[0].X + ","
-                + triangle.Points[0].Y + "), "
-                + "p2=("
-                + triangle.Points[1].X + ","
-                + triangle.Points[1].Y + "), "
-                + "p3=("
-                + triangle.Points[2].X + ","
-                + triangle.Points[2].Y + "), "
-                + "stroke=" + triangle.StrokeThickness + ", "
-                + "brush=" + triangle.Stroke + ", "
-                + "fill=" + triangle.Fill;
+            }
+            if (shape is Polygon)
+            {
+                Polygon triangle = shape as Polygon;
+                return "triangle: p1=("
+                    + triangle.Points[0].X + ","
+                    + triangle.Points[0].Y + "), "
+                    + "p2=("
+                    + triangle.Points[1].X + ","
+                    + triangle.Points[1].Y + "), "
+                    + "p3=("
+                    + triangle.Points[2].X + ","
+                    + triangle.Points[2].Y + "), "
+                    + "stroke=" + triangle.StrokeThickness + ", "
+                    + "brush=" + triangle.Stroke + ", "
+                    + "fill=" + triangle.Fill;
+            }
+            return "none";
         }
     }
 }
