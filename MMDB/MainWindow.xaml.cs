@@ -26,8 +26,8 @@ namespace MMDB
         private string graphicPath = "";
         private bool graphicLoaded = false;
         private bool graphicNew = false;
-        private Shapes shape = Shapes.None;
-        private Operations operation = Operations.None;
+        private Shapes shapeType = Shapes.None;
+        private Operations operationType = Operations.None;
         private Point p;
         private Point p1;
         private Point p2;
@@ -91,6 +91,7 @@ namespace MMDB
             {
                 Shape s = (Shape) c.Children[0];
                 s.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                s.MouseMove += new MouseEventHandler(shape_MouseMove);
                 listOfObjects.Items.Add(vd.ParametersToString(s));
                 c.Children.RemoveAt(0);
                 canvas.Children.Add(s);
@@ -169,91 +170,78 @@ namespace MMDB
             switch (senderButton.Name)
             {
                 case "lineButton":
-                    shape = Shapes.Line;
+                    shapeType = Shapes.Line;
                     break;
                 case "ellipseButton":
-                    shape = Shapes.Ellipse;
+                    shapeType = Shapes.Ellipse;
                     break;
                 case "rectangleButton":
-                    shape = Shapes.Rectangle;
+                    shapeType = Shapes.Rectangle;
                     break;
                 case "triangleButton":
-                    shape = Shapes.Triangle;
+                    shapeType = Shapes.Triangle;
                     break;
             }
-            operation = Operations.None;
+            operationType = Operations.None;
             p1 = p;
             p2 = p;
         }
 
         private void paintButton_Click(object sender, RoutedEventArgs e)
         {
-            operation = Operations.Paint;
+            operationType = Operations.Paint;
         }
 
         //=====================================================================
         // Vector graphics
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (operation == Operations.None)
+            if (operationType == Operations.None)
             {
-                if (shape == Shapes.Line)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
-                    else if (p2 == p)
+                Shape shape;
+                if (p1 == p) p1 = Mouse.GetPosition(canvas);
+                else if (p2 == p)
+                {
+                    p2 = Mouse.GetPosition(canvas);
+                    switch (shapeType)
                     {
-                        p2 = Mouse.GetPosition(canvas);
-                        Line line = vd.CreateLine(p1, p2, 2, Brushes.Black);
-                        line.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvas.Children.Add(line);
-                        listOfObjects.Items.Add(vd.ParametersToString(line));
-                        p1 = p;
-                        p2 = p;
+                        case Shapes.Line:
+                            shape = vd.CreateLine(p1, p2, 2, Brushes.Black);
+                            break;
+                        case Shapes.Ellipse:
+                            shape = vd.CreateEllipse(p1, p2, 2, Brushes.Black, color);
+                            break;
+                        case Shapes.Rectangle:
+                            shape = vd.CreateRectangle(p1, p2, 2, Brushes.Black, color);
+                            break;
+                        case Shapes.Triangle:
+                            shape = vd.CreateTriangle(p1, p2, 2, Brushes.Black, color);
+                            break;
+                        default:
+                            shape = new Line();
+                            break;
                     }
-                if (shape == Shapes.Ellipse)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
-                    else if (p2 == p)
-                    {
-                        p2 = Mouse.GetPosition(canvas);
-                        Ellipse ellipse = vd.CreateEllipse(p1, p2, 2, Brushes.Black, color);
-                        ellipse.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvas.Children.Add(ellipse);
-                        listOfObjects.Items.Add(vd.ParametersToString(ellipse));
-                        p1 = p;
-                        p2 = p;
-                    }
-                if (shape == Shapes.Rectangle)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
-                    else if (p2 == p)
-                    {
-                        p2 = Mouse.GetPosition(canvas);
-                        Rectangle rectangle = vd.CreateRectangle(p1, p2, 2, Brushes.Black, color);
-                        rectangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvas.Children.Add(rectangle);
-                        listOfObjects.Items.Add(vd.ParametersToString(rectangle));
-                        p1 = p;
-                        p2 = p;
-                    }
-                if (shape == Shapes.Triangle)
-                    if (p1 == p) p1 = Mouse.GetPosition(canvas);
-                    else if (p2 == p)
-                    {
-                        p2 = Mouse.GetPosition(canvas);
-                        Polygon triangle = vd.CreateTriangle(p1, p2, 2, Brushes.Black, color);
-                        triangle.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
-                        canvas.Children.Add(triangle);
-                        listOfObjects.Items.Add(vd.ParametersToString(triangle));
-                        p1 = p;
-                        p2 = p;
-                    }
+                    shape.MouseDown += new MouseButtonEventHandler(shape_MouseDown);
+                    shape.MouseMove += new MouseEventHandler(shape_MouseMove);
+                    canvas.Children.Add(shape);
+                    listOfObjects.Items.Add(vd.ParametersToString(shape));
+                    p1 = p;
+                    p2 = p;
+                }
             }
         }
 
         private void shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (operation == Operations.Paint) {
+            if (operationType == Operations.Paint) {
                 int index = canvas.Children.IndexOf((Shape)sender);
                 ((Shape) canvas.Children[index]).Fill = color;
             }
+        }
+
+        private void shape_MouseMove(object sender, MouseEventArgs e)
+        {
+
         }
 
         private void colorButton_Click(object sender, RoutedEventArgs e)
