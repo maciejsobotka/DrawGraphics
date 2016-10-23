@@ -40,6 +40,7 @@ namespace MMDB
             InitializeComponent();
             vd = new VectorDraw();
             color = Brushes.White;
+            colorRectangle.Fill = color;
             p.X = 0.0;
             p.Y = 0.0;
         }
@@ -301,6 +302,7 @@ namespace MMDB
                     color = Brushes.Blue;
                     break;
             }
+            colorRectangle.Fill = color;
         }
     }
 }

@@ -27,7 +27,7 @@
 
             </MenuItem>
         </Menu>
-        <Rectangle x:Name="colorRectangle" HorizontalAlignment="Left" Height="22" Margin="10,425,0,0" VerticalAlignment="Top" Width="68"/>
+        <Rectangle x:Name="colorRectangle" HorizontalAlignment="Left" Height="30" Margin="10,510,0,0" VerticalAlignment="Top" Width="30" Stroke="Black"/>
         <TextBox x:Name="textBoxSource" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="229" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
         <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown"/>
 
