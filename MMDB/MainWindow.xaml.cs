@@ -33,6 +33,7 @@ namespace MMDB
         private Point p2;
         private VectorDraw vd;
         private Brush color;
+        private Shape clickedShape;
         
         public MainWindow()
         {
@@ -153,6 +154,7 @@ namespace MMDB
             rectangleButton.IsEnabled = true;
             triangleButton.IsEnabled = true;
             paintButton.IsEnabled = true;
+            grabButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -187,16 +189,27 @@ namespace MMDB
             p2 = p;
         }
 
-        private void paintButton_Click(object sender, RoutedEventArgs e)
+        private void operationButton_Click(object sender, RoutedEventArgs e)
         {
-            operationType = Operations.Paint;
+            Button senderButton = (Button)sender;
+
+            switch (senderButton.Name)
+            {
+                case "paintButton":
+                    operationType = Operations.Paint;
+                    break;
+                case "grabButton":
+                    operationType = Operations.Grab;
+                    break;
+            }
+            shapeType = Shapes.None;
         }
 
         //=====================================================================
         // Vector graphics
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (operationType == Operations.None)
+            if (operationType == Operations.None && shapeType != Shapes.None)
             {
                 Shape shape;
                 if (p1 == p) p1 = Mouse.GetPosition(canvas);
@@ -233,15 +246,34 @@ namespace MMDB
 
         private void shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            clickedShape = (Shape)sender;
             if (operationType == Operations.Paint) {
                 int index = canvas.Children.IndexOf((Shape)sender);
                 ((Shape) canvas.Children[index]).Fill = color;
+            }
+            if (operationType == Operations.Grab)
+            {
+                p1 = Mouse.GetPosition(canvas);
             }
         }
 
         private void shape_MouseMove(object sender, MouseEventArgs e)
         {
-
+            if (operationType == Operations.Grab)
+            {
+                p2 = Mouse.GetPosition(canvas);
+                textBoxSource.Text = p2.X.ToString() + " x " + p2.Y.ToString();
+                if (Mouse.LeftButton == MouseButtonState.Pressed)
+                {
+                    int index = canvas.Children.IndexOf(clickedShape);
+                    Thickness t = ((Shape)canvas.Children[index]).Margin;
+                    double leftMargin = t.Left - (p1.X - p2.X);
+                    double topMargin = t.Top - (p1.Y - p2.Y);
+                    ((Shape)canvas.Children[index]).Margin = new Thickness(leftMargin, topMargin, 0, 0);
+                    p1 = p2;
+                    listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
+                }
+            }
         }
 
         private void colorButton_Click(object sender, RoutedEventArgs e)

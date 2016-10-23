@@ -38,8 +38,8 @@
         <Button x:Name="rectangleButton" Content="{StaticResource rectangle}" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <Button x:Name="triangleButton" Content="{StaticResource triangle}" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
         
-        <Button x:Name="paintButton" Content="{StaticResource paint}" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="paintButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="grabButton" Content="{StaticResource grab}" HorizontalAlignment="Left" Margin="34,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="paintButton" Content="{StaticResource paint}" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="grabButton" Content="{StaticResource grab}" HorizontalAlignment="Left" Margin="34,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
 
         <Button x:Name="whiteButton" Content="{StaticResource white}"  HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <Button x:Name="blackButton" Content="{StaticResource black}" HorizontalAlignment="Left" Margin="34,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>

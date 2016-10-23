@@ -108,8 +108,8 @@ namespace MMDB
             if(shape is Line)
             {
                 Line line = shape as Line;
-                return "line: p1=(" + line.X1 + "," + line.Y1 + "), "
-                    + "p2=(" + line.X2 + "," + line.Y2 + "), "
+                return "line: p1=(" + (line.X1 + line.Margin.Left) + "," + (line.Y1 + line.Margin.Top)+ "), "
+                    + "p2=(" + (line.X2 + line.Margin.Left) + "," + (line.Y2 + line.Margin.Top) + "), "
                     + "stroke=" + line.StrokeThickness + ", "
                     + "brush=" + line.Stroke;
             }
@@ -148,14 +148,14 @@ namespace MMDB
             {
                 Polygon triangle = shape as Polygon;
                 return "triangle: p1=("
-                    + triangle.Points[0].X + ","
-                    + triangle.Points[0].Y + "), "
+                    + (triangle.Points[0].X + triangle.Margin.Left) + ","
+                    + (triangle.Points[0].Y + triangle.Margin.Top) + "), "
                     + "p2=("
-                    + triangle.Points[1].X + ","
-                    + triangle.Points[1].Y + "), "
+                    + (triangle.Points[1].X + triangle.Margin.Left) + ","
+                    + (triangle.Points[1].Y + triangle.Margin.Top) + "), "
                     + "p3=("
-                    + triangle.Points[2].X + ","
-                    + triangle.Points[2].Y + "), "
+                    + (triangle.Points[2].X + triangle.Margin.Left) + ","
+                    + (triangle.Points[2].Y + triangle.Margin.Top) + "), "
                     + "stroke=" + triangle.StrokeThickness + ", "
                     + "brush=" + triangle.Stroke + ", "
                     + "fill=" + triangle.Fill;
