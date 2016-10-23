@@ -30,7 +30,7 @@
         </Menu>
         <Rectangle x:Name="colorRectangle" HorizontalAlignment="Left" Height="30" Margin="10,510,0,0" VerticalAlignment="Top" Width="30" Stroke="Black"/>
         <TextBox x:Name="textBoxSource" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="229" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
-        <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown"/>
+        <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove"/>
 
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
 

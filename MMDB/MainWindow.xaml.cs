@@ -34,6 +34,7 @@ namespace MMDB
         private VectorDraw vd;
         private Brush color;
         private Shape clickedShape;
+        private bool shapeCreated = false;
         
         public MainWindow()
         {
@@ -215,12 +216,17 @@ namespace MMDB
         // Vector graphics
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (operationType == Operations.None && shapeType != Shapes.None)
+            p1 = Mouse.GetPosition(canvas);
+            shapeCreated = false;
+        }
+
+        private void canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed && operationType == Operations.None)
             {
-                Shape shape;
-                if (p1 == p) p1 = Mouse.GetPosition(canvas);
-                else if (p2 == p)
+                if (!shapeCreated)
                 {
+                    Shape shape;
                     p2 = Mouse.GetPosition(canvas);
                     switch (shapeType)
                     {
@@ -244,8 +250,15 @@ namespace MMDB
                     shape.MouseMove += new MouseEventHandler(shape_MouseMove);
                     canvas.Children.Add(shape);
                     listOfObjects.Items.Add(vd.ParametersToString(shape));
-                    p1 = p;
-                    p2 = p;
+                    clickedShape = shape;
+                    shapeCreated = true;
+                }
+                else
+                {
+                    p2 = Mouse.GetPosition(canvas);
+                    int index = canvas.Children.IndexOf(clickedShape);
+                    canvas.Children[index] = vd.ResizeShape(clickedShape, p1, p2);
+                    listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
                 }
             }
         }

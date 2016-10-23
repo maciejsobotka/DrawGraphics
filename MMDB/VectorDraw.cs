@@ -11,6 +11,8 @@ namespace MMDB
 {
     class VectorDraw
     {
+        //=====================================================================
+        // Create
         public Line CreateLine(Point p1, Point p2, int strokeThickness, Brush color)
         {
             Line line = new Line();
@@ -101,6 +103,90 @@ namespace MMDB
             return triangle;
         }
 
+        //=====================================================================
+        // Resize
+        public Shape ResizeShape(Shape shape, Point p1, Point p2)
+        {
+            if (shape is Line)
+            {
+                Line line = shape as Line;
+                line.X1 = p1.X;
+                line.Y1 = p1.Y;
+                line.X2 = p2.X;
+                line.Y2 = p2.Y;
+
+                return line;
+            }
+            if (shape is Ellipse)
+            {
+                Ellipse ellipse = shape as Ellipse;
+                ellipse.Height = Math.Abs(p1.Y - p2.Y);
+                ellipse.Width = Math.Abs(p1.X - p2.X);
+                double leftMargin = p1.X;
+                double topMargin = p1.Y;
+                if (p1.X > p2.X) leftMargin = p2.X;
+                if (p1.Y > p2.Y) topMargin = p2.Y;
+                ellipse.Margin = new Thickness(leftMargin, topMargin, 0, 0);
+
+                return ellipse;
+            }
+            if(shape is Rectangle)
+            {
+                Rectangle rectangle = shape as Rectangle;
+                rectangle.Height = Math.Abs(p1.Y - p2.Y);
+                rectangle.Width = Math.Abs(p1.X - p2.X);
+                double leftMargin = p1.X;
+                double topMargin = p1.Y;
+                if (p1.X > p2.X) leftMargin = p2.X;
+                if (p1.Y > p2.Y) topMargin = p2.Y;
+                rectangle.Margin = new Thickness(leftMargin, topMargin, 0, 0);
+
+                return rectangle;
+            }
+            if(shape is Polygon)
+            {
+                Polygon triangle = shape as Polygon;
+                Point t1, t2, t3;
+                if (p1.X < p2.X)                         // p1 left
+                    if (p1.Y > p2.Y)                     // p1 bottom left
+                    {
+                        t1 = new Point(p1.X, p1.Y);
+                        t2 = new Point(p1.X + (p2.X - p1.X) / 2, p2.Y);
+                        t3 = new Point(p2.X, p1.Y);
+                    }
+                    else
+                    {                                   // p1 top left
+                        t1 = new Point(p1.X, p2.Y);
+                        t2 = new Point(p1.X + (p2.X - p1.X) / 2, p1.Y);
+                        t3 = new Point(p2.X, p2.Y);
+                    }
+                else                                    // p2 left
+                    if (p1.Y > p2.Y)                    // p2 top left      
+                    {
+                        t1 = new Point(p2.X, p1.Y);
+                        t2 = new Point(p2.X + (p1.X - p2.X) / 2, p2.Y);
+                        t3 = new Point(p1.X, p1.Y);
+                    }
+                    else
+                    {                                   // p2 bottom left
+                        t1 = new Point(p2.X, p2.Y);
+                        t2 = new Point(p2.X + (p1.X - p2.X) / 2, p1.Y);
+                        t3 = new Point(p1.X, p2.Y);
+                    }
+
+                PointCollection trianglePoints = new PointCollection();
+                trianglePoints.Add(t1);
+                trianglePoints.Add(t2);
+                trianglePoints.Add(t3);
+                triangle.Points = trianglePoints;
+
+                return triangle;
+            }
+            return shape;
+        }
+
+        //=====================================================================
+        // ToString
         public String ParametersToString(Shape shape)
         {
             if(shape is Line)
