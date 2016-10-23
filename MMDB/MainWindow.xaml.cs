@@ -43,6 +43,7 @@ namespace MMDB
             color2 = Brushes.Black;
             fillRectangle.Fill = color;
             strokeRectangle.Fill = color2;
+            this.KeyDown += new KeyEventHandler(Window_KeyDown);
         }
 
         //=====================================================================
@@ -121,6 +122,16 @@ namespace MMDB
                     XamlWriter.Save(shape);
                 file.Close();
             }
+        }
+
+        void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
+                NewFile_Click(sender, e);
+            if (e.Key == Key.O && Keyboard.Modifiers == ModifierKeys.Control)
+                OpenFile_Click(sender, e);
+            if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+                SaveFile_Click(sender, e);
         }
 
         private void menuOption_MouseEnter(object sender, MouseEventArgs e)
