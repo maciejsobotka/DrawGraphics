@@ -53,15 +53,15 @@ namespace MMDB
             if (graphicLoaded || graphicNew)
             {
                 ClearObjects();
-                textBoxSource.Text = "New File";
+                textBoxFileName.Text = "New File";
             }
             canvas.Background = Brushes.White;
             graphicNew = true;
             graphicLoaded = false;
-            textBoxSource.Text = "";
-            textBoxSource.Foreground = Brushes.Black;
-            textBoxSource.FontStyle = FontStyles.Normal;
-            textBoxSource.Text = "New File";
+            textBoxFileName.Text = "";
+            textBoxFileName.Foreground = Brushes.Black;
+            textBoxFileName.FontStyle = FontStyles.Normal;
+            textBoxFileName.Text = "New File";
             EnableButtons();
             saveFile.Foreground = Brushes.White;
         }
@@ -75,10 +75,10 @@ namespace MMDB
             {
                 graphicPath = dlg.FileName;
 
-                textBoxSource.Text = "";
-                textBoxSource.Foreground = Brushes.Black;
-                textBoxSource.FontStyle = FontStyles.Normal;
-                textBoxSource.Text = dlg.SafeFileName;
+                textBoxFileName.Text = "";
+                textBoxFileName.Foreground = Brushes.Black;
+                textBoxFileName.FontStyle = FontStyles.Normal;
+                textBoxFileName.Text = dlg.SafeFileName;
 
                 if (graphicNew || graphicLoaded)
                 {
@@ -101,8 +101,6 @@ namespace MMDB
                     c.Children.RemoveAt(0);
                     canvas.Children.Add(s);
                 }
-                textBoxSource.Text = canvas.Children[0].ToString();
-
                 saveFile.Foreground = Brushes.White;
             }
         }
@@ -121,6 +119,7 @@ namespace MMDB
                 foreach (var shape in canvas.Children)
                     XamlWriter.Save(shape);
                 file.Close();
+                textBoxFileName.Text = dlg.SafeFileName;
             }
         }
 
@@ -241,12 +240,13 @@ namespace MMDB
 
         private void canvas_MouseMove(object sender, MouseEventArgs e)
         {
+            p2 = Mouse.GetPosition(canvas);
+            textBoxCoords.Text = p2.X.ToString() + " x " + p2.Y.ToString();
             if (Mouse.LeftButton == MouseButtonState.Pressed && operationType == Operations.None)
             {
                 if (!shapeCreated)
                 {
                     Shape shape;
-                    p2 = Mouse.GetPosition(canvas);
                     switch (shapeType)
                     {
                         case Shapes.Line:
@@ -275,7 +275,6 @@ namespace MMDB
                 }
                 else
                 {
-                    p2 = Mouse.GetPosition(canvas);
                     int index = canvas.Children.IndexOf(clickedShape);
                     canvas.Children[index] = vd.ResizeShape(clickedShape, p1, p2);
                     listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
@@ -328,7 +327,6 @@ namespace MMDB
             if (operationType == Operations.Grab)
             {
                 p2 = Mouse.GetPosition(canvas);
-                textBoxSource.Text = p2.X.ToString() + " x " + p2.Y.ToString();
                 if (Mouse.LeftButton == MouseButtonState.Pressed || Mouse.RightButton == MouseButtonState.Pressed)
                 {
                     int index = canvas.Children.IndexOf(clickedShape);

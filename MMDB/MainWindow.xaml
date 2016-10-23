@@ -33,7 +33,9 @@
         <Label Content="Fill:" HorizontalAlignment="Left" Height="24" Margin="5,506,0,0" VerticalAlignment="Top" Width="45" RenderTransformOrigin="0.25,0.4" FontStyle="Italic"/>
         <Label Content="Stroke:" HorizontalAlignment="Left" Height="24" Margin="5,541,0,0" VerticalAlignment="Top" Width="45" FontStyle="Italic"/>
 
-        <TextBox x:Name="textBoxSource" Height="23" Margin="0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="229" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
+        <TextBox x:Name="textBoxFileName" Height="23" Margin="-200,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="200" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
+        <TextBox x:Name="textBoxCoords" Height="23" Margin="-475,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="74" Cursor="Arrow" IsEnabled="False" Foreground="Black"/>
+        
         <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove"/>
 
         <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
