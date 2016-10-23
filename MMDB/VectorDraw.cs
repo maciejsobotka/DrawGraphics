@@ -9,8 +9,6 @@ using System.Windows.Shapes;
 
 namespace MMDB
 {
-    enum Shapes { None, Line, Ellipse, Rectangle, Triangle}
-    enum Operations { None, Paint, Grab}
     class VectorDraw
     {
         public Line CreateLine(Point p1, Point p2, int strokeThickness, Brush color)

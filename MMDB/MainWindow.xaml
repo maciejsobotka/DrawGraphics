@@ -16,6 +16,7 @@
         <Image x:Key="triangle" Source="/content/triangle.png"/>
         <Image x:Key="paint" Source="/content/paint.png"/>
         <Image x:Key="grab" Source="/content/grab.png"/>
+        <Image x:Key="remove" Source="/content/remove.png"/>
     </Window.Resources>
     <Grid x:Name="grid">
         <Menu Width="Auto" Height="24" VerticalAlignment="Top" Foreground="White" Background="Black">
@@ -40,6 +41,7 @@
         
         <Button x:Name="paintButton" Content="{StaticResource paint}" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <Button x:Name="grabButton" Content="{StaticResource grab}" HorizontalAlignment="Left" Margin="34,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="removeButton" Content="{StaticResource remove}" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
 
         <Button x:Name="whiteButton" Content="{StaticResource white}"  HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>
         <Button x:Name="blackButton" Content="{StaticResource black}" HorizontalAlignment="Left" Margin="34,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" Style="{DynamicResource ButtonStyle}"/>

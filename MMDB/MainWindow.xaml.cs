@@ -154,8 +154,10 @@ namespace MMDB
             ellipseButton.IsEnabled = true;
             rectangleButton.IsEnabled = true;
             triangleButton.IsEnabled = true;
+
             paintButton.IsEnabled = true;
             grabButton.IsEnabled = true;
+            removeButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -201,6 +203,9 @@ namespace MMDB
                     break;
                 case "grabButton":
                     operationType = Operations.Grab;
+                    break;
+                case "removeButton":
+                    operationType = Operations.Remove;
                     break;
             }
             shapeType = Shapes.None;
@@ -248,13 +253,20 @@ namespace MMDB
         private void shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
             clickedShape = (Shape)sender;
-            if (operationType == Operations.Paint) {
-                int index = canvas.Children.IndexOf((Shape)sender);
-                ((Shape) canvas.Children[index]).Fill = color;
-            }
-            if (operationType == Operations.Grab)
+            switch(operationType)
             {
-                p1 = Mouse.GetPosition(canvas);
+                case Operations.Paint:
+                    int index = canvas.Children.IndexOf((Shape)sender);
+                    ((Shape) canvas.Children[index]).Fill = color;
+                    break;
+                case Operations.Grab:
+                    p1 = Mouse.GetPosition(canvas);
+                    break;
+                case Operations.Remove:
+                    index = canvas.Children.IndexOf((Shape)sender);
+                    canvas.Children.RemoveAt(index);
+                    listOfObjects.Items.RemoveAt(index);
+                    break;
             }
         }
 
