@@ -34,7 +34,7 @@ namespace MMDB
         private Brush color, color2;
         private Shape clickedShape;
         private bool shapeCreated = false;
-        
+        private EditWindow editWindow = new EditWindow();
         public MainWindow()
         {
             InitializeComponent();
@@ -44,6 +44,7 @@ namespace MMDB
             fillRectangle.Fill = color;
             strokeRectangle.Fill = color2;
             this.KeyDown += new KeyEventHandler(Window_KeyDown);
+            editWindow.MyEvent += new EventHandler(childWindow_MyEvent);
         }
 
         //=====================================================================
@@ -179,6 +180,7 @@ namespace MMDB
             paintButton.IsEnabled = true;
             grabButton.IsEnabled = true;
             removeButton.IsEnabled = true;
+            editButton.IsEnabled = true;
         }
 
         private void ClearObjects()
@@ -225,6 +227,9 @@ namespace MMDB
                     break;
                 case "removeButton":
                     operationType = Operations.Remove;
+                    break;
+                case "editButton":
+                    operationType = Operations.Resize;
                     break;
             }
             shapeType = Shapes.None;
@@ -298,6 +303,17 @@ namespace MMDB
                     index = canvas.Children.IndexOf((Shape)sender);
                     canvas.Children.RemoveAt(index);
                     listOfObjects.Items.RemoveAt(index);
+                    break;
+                case Operations.Resize:
+                    if (!editWindow.IsVisible)
+                    {
+                        editWindow = new EditWindow();
+                        editWindow.MyEvent += new EventHandler(childWindow_MyEvent);
+                        editWindow.SetShapeData(vd.GetP1(clickedShape), vd.GetP2(clickedShape));
+                        editWindow.Show();
+                    }
+                    else
+                        editWindow.SetShapeData(vd.GetP1(clickedShape), vd.GetP2(clickedShape));
                     break;
             }
         }
@@ -392,6 +408,29 @@ namespace MMDB
                     break;
             }
             strokeRectangle.Fill = color2;
+        }
+
+        void childWindow_MyEvent(object sender, EventArgs e)
+        {
+            try
+            {
+                Point p1 = new Point(Convert.ToDouble(editWindow.x1.Text), Convert.ToDouble(editWindow.y1.Text));
+                Point p2 = new Point(Convert.ToDouble(editWindow.x2.Text), Convert.ToDouble(editWindow.y2.Text));
+                int index = canvas.Children.IndexOf(clickedShape);
+                canvas.Children[index] = vd.ResizeShape(clickedShape, p1, p2);
+                listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
+            }
+            catch (FormatException) { }
+        }
+
+        /// <summary>
+        /// Shutdown on MainWindowClose
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            App.Current.Shutdown();
         }
     }
 }

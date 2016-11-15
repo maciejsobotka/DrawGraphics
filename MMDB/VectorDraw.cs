@@ -185,6 +185,69 @@ namespace MMDB
             return shape;
         }
 
+        public Point GetP1(Shape shape)
+        {
+            Point p = new Point();
+            if (shape is Line)
+            {
+                Line line = shape as Line;
+                return new Point(line.X1, line.Y1);
+            }
+            if (shape is Ellipse)
+            {
+                Ellipse ellipse = shape as Ellipse;
+                return new Point(ellipse.Margin.Left, ellipse.Margin.Top);
+            }
+            if (shape is Rectangle)
+            {
+                Rectangle rectangle = shape as Rectangle;
+                return new Point(rectangle.Margin.Left, rectangle.Margin.Top);
+            }
+            if (shape is Polygon)
+            {
+                Polygon triangle = shape as Polygon;
+                p = new Point(triangle.Points[0].X, triangle.Points[0].Y);
+                for (int i = 1; i < triangle.Points.Count; ++i)
+                {
+                    p.X = Math.Min(p.X, triangle.Points[i].X);
+                    p.Y = Math.Min(p.Y, triangle.Points[i].Y);
+                }
+                return p;
+            }
+            return p;
+        }
+
+        public Point GetP2(Shape shape)
+        {
+            Point p = new Point();
+            if (shape is Line)
+            {
+                Line line = shape as Line;
+                return new Point(line.X2, line.Y2);
+            }
+            if (shape is Ellipse)
+            {
+                Ellipse ellipse = shape as Ellipse;
+                return new Point(ellipse.Margin.Left + ellipse.Width, ellipse.Margin.Top + ellipse.Height);
+            }
+            if (shape is Rectangle)
+            {
+                Rectangle rectangle = shape as Rectangle;
+                return new Point(rectangle.Margin.Left + rectangle.Width, rectangle.Margin.Top + rectangle.Height);
+            }
+            if (shape is Polygon)
+            {
+                Polygon triangle = shape as Polygon;
+                p = new Point(triangle.Points[0].X, triangle.Points[0].Y);
+                for (int i = 1; i < triangle.Points.Count; ++i)
+                {
+                    p.X = Math.Max(p.X, triangle.Points[i].X);
+                    p.Y = Math.Max(p.Y, triangle.Points[i].Y);
+                }
+                return p;
+            }
+            return p;
+        }
         //=====================================================================
         // ToString
         public String ParametersToString(Shape shape)

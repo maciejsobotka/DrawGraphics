@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 namespace MMDB
 {
     enum Shapes { None, Line, Ellipse, Rectangle, Triangle }
-    enum Operations { None, Paint, Grab, Remove }
+    enum Operations { None, Paint, Grab, Remove, Resize }
 }
