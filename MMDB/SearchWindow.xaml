@@ -4,6 +4,5 @@
         Title="SearchWindow" Height="300" Width="300" ResizeMode="CanMinimize" Topmost="True" Icon="content/icon_small.ico" WindowStartupLocation="CenterScreen">
     <Grid Background="Black">
         <Button x:Name="lineButton" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75" Click="searchButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <ListBox x:Name="foundFiles" HorizontalAlignment="Left" Height="113" Margin="31,98,0,0" VerticalAlignment="Top" Width="215"/>
     </Grid>
 </Window>

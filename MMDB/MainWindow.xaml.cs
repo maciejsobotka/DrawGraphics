@@ -35,7 +35,7 @@ namespace MMDB
         private Shape clickedShape;
         private bool shapeCreated = false;
         private EditWindow editWindow = new EditWindow();
-        private SearchWindow searchWindow = new SearchWindow();
+        private SearchWindow searchWindow;
         public MainWindow()
         {
             InitializeComponent();
@@ -134,7 +134,10 @@ namespace MMDB
             if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
                 SaveFile_Click(sender, e);
             if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                searchWindow = new SearchWindow();
                 searchWindow.Show();
+            }
         }
 
         private void menuOption_MouseEnter(object sender, MouseEventArgs e)

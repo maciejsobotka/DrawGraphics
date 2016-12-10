@@ -1,0 +1,8 @@
+﻿<Window x:Class="MMDB.GraphicPreviewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="GraphicPreviewWindow" Height="620" Width="620" Topmost="True" Icon="content/icon_small.ico">
+    <Grid>
+        <Canvas x:Name="canvas"/>
+    </Grid>
+</Window>
