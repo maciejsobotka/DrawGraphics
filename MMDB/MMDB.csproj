@@ -62,6 +62,9 @@
       <DependentUpon>ResizeWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
+    <Compile Include="SearchWindow.xaml.cs">
+      <DependentUpon>SearchWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="VectorDraw.cs" />
     <Page Include="ResizeWindow.xaml">
       <SubType>Designer</SubType>
@@ -86,6 +89,10 @@
     <Page Include="MenuDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SearchWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
