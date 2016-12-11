@@ -58,6 +58,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Extensions\EllipseExtensions.cs" />
+    <Compile Include="Extensions\LineExtensions.cs" />
+    <Compile Include="Extensions\ShapeExtensions.cs" />
+    <Compile Include="Extensions\TriangleExtensions.cs" />
+    <Compile Include="Extensions\RectangleExtensions.cs" />
     <Compile Include="GraphicPreviewWindow.xaml.cs">
       <DependentUpon>GraphicPreviewWindow.xaml</DependentUpon>
     </Compile>
@@ -71,7 +76,6 @@
     <Compile Include="SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="VectorDraw.cs" />
     <Page Include="GraphicPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

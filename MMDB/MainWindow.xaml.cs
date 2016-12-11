@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MMDB.Extensions;
 
 namespace MMDB
 {
@@ -30,7 +31,6 @@ namespace MMDB
         private Operations operationType = Operations.None;
         private Point p1;
         private Point p2;
-        private VectorDraw vd;
         private Brush color, color2;
         private Shape clickedShape;
         private bool shapeCreated = false;
@@ -39,7 +39,6 @@ namespace MMDB
         public MainWindow()
         {
             InitializeComponent();
-            vd = new VectorDraw();
             color = Brushes.White;
             color2 = Brushes.Black;
             fillRectangle.Fill = color;
@@ -99,7 +98,7 @@ namespace MMDB
                     s.MouseLeftButtonDown += new MouseButtonEventHandler(shape_MouseLeftButtonDown);
                     s.MouseRightButtonDown += new MouseButtonEventHandler(shape_MouseRightButtonDown);
                     s.MouseMove += new MouseEventHandler(shape_MouseMove);
-                    listOfObjects.Items.Add(vd.ParametersToString(s));
+                    listOfObjects.Items.Add(s.ParametersToString());
                     c.Children.RemoveAt(0);
                     canvas.Children.Add(s);
                 }
@@ -261,16 +260,20 @@ namespace MMDB
                     switch (shapeType)
                     {
                         case Shapes.Line:
-                            shape = vd.CreateLine(p1, p2, 2, color2);
+                            Line line = new Line();
+                            shape = line.Create(p1, p2, 2, color2);
                             break;
                         case Shapes.Ellipse:
-                            shape = vd.CreateEllipse(p1, p2, 2, color2, color);
+                            Ellipse ellipse = new Ellipse();
+                            shape = ellipse.Create(p1, p2, 2, color2, color);
                             break;
                         case Shapes.Rectangle:
-                            shape = vd.CreateRectangle(p1, p2, 2, color2, color);
+                            Rectangle rectangle = new Rectangle();
+                            shape = rectangle.Create(p1, p2, 2, color2, color);
                             break;
                         case Shapes.Triangle:
-                            shape = vd.CreateTriangle(p1, p2, 2, color2, color);
+                            Polygon triangle = new Polygon();
+                            shape = triangle.Create(p1, p2, 2, color2, color);
                             break;
                         default:
                             shape = new Line();
@@ -280,15 +283,16 @@ namespace MMDB
                     shape.MouseRightButtonDown += new MouseButtonEventHandler(shape_MouseRightButtonDown);
                     shape.MouseMove += new MouseEventHandler(shape_MouseMove);
                     canvas.Children.Add(shape);
-                    listOfObjects.Items.Add(vd.ParametersToString(shape));
+                    listOfObjects.Items.Add(shape.ParametersToString());
                     clickedShape = shape;
                     shapeCreated = true;
                 }
                 else
                 {
                     int index = canvas.Children.IndexOf(clickedShape);
-                    canvas.Children[index] = vd.ResizeShape(clickedShape, p1, p2);
-                    listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
+                    clickedShape.Resize(p1, p2);
+                    //canvas.Children[index] = clickedShape.Resize(p1, p2);
+                    listOfObjects.Items[index] = clickedShape.ParametersToString();
                 }
             }
         }
@@ -315,11 +319,11 @@ namespace MMDB
                     {
                         editWindow = new EditWindow();
                         editWindow.MyEvent += new EventHandler(childWindow_MyEvent);
-                        editWindow.SetShapeData(vd.GetP1(clickedShape), vd.GetP2(clickedShape));
+                        editWindow.SetShapeData(clickedShape.GetP1(), clickedShape.GetP2());
                         editWindow.Show();
                     }
                     else
-                        editWindow.SetShapeData(vd.GetP1(clickedShape), vd.GetP2(clickedShape));
+                        editWindow.SetShapeData(clickedShape.GetP1(), clickedShape.GetP2());
                     break;
             }
         }
@@ -357,7 +361,7 @@ namespace MMDB
                     double topMargin = t.Top - (p1.Y - p2.Y);
                     ((Shape)canvas.Children[index]).Margin = new Thickness(leftMargin, topMargin, 0, 0);
                     p1 = p2;
-                    listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
+                    listOfObjects.Items[index] = clickedShape.ParametersToString();
                 }
             }
         }
@@ -423,8 +427,9 @@ namespace MMDB
                 Point p1 = new Point(Convert.ToDouble(editWindow.x1.Text), Convert.ToDouble(editWindow.y1.Text));
                 Point p2 = new Point(Convert.ToDouble(editWindow.x2.Text), Convert.ToDouble(editWindow.y2.Text));
                 int index = canvas.Children.IndexOf(clickedShape);
-                canvas.Children[index] = vd.ResizeShape(clickedShape, p1, p2);
-                listOfObjects.Items[index] = vd.ParametersToString(clickedShape);
+                clickedShape.Resize(p1, p2);
+                //canvas.Children[index] = clickedShape.Resize(p1, p2);
+                listOfObjects.Items[index] = clickedShape.ParametersToString();
             }
             catch (FormatException) { }
         }
