@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,45 +26,84 @@ namespace MMDB
         private SearchResultWindow searchResultWindow;
         private string[] symbols = { "==", "!=", ">", "<", ">=", "<=" };
         private string[] shapes = { "Line", "Ellipse", "Rectangle", "Triangle" };
+        private string[] attributes = { "None", "Fill", "Stroke" };
+        private string[] colors = { "White", "Black", "Gray", "Red", "Green", "Blue" };
+        private Dictionary<string, string> colorDict;
+        private string dbPath;
 
         public SearchWindow()
         {
             InitializeComponent();
-            folderPathTextBox.Text = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            InitializeColorDictionary();
+            dbPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            folderPathTextBox.Text = dbPath;
             foreach (var symbol in symbols)
                 comparisonComboBox.Items.Add(symbol);
             comparisonComboBox.SelectedIndex = 0;
             foreach (var shape in shapes)
                 shapeComboBox.Items.Add(shape);
+            foreach (var attr in attributes)
+                attributeComboBox.Items.Add(attr);
+            attributeComboBox.SelectedIndex = 0;
+            foreach (var color in colors)
+                attributeValueComboBox.Items.Add(color);
+            attributeValueComboBox.SelectedIndex = 0;
             shapeComboBox.SelectedIndex = 0;
+        }
+
+        private void InitializeColorDictionary()
+        {
+            colorDict = new Dictionary<string, string>();
+            colorDict.Add("White", "#FFFFFFFF");
+            colorDict.Add("Black", "#FF000000");
+            colorDict.Add("Gray", "#FF808080");
+            colorDict.Add("Red", "#FFFF0000");
+            colorDict.Add("Green", "#FF008000");
+            colorDict.Add("Blue", "#FF0000FF");
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            string[] files = { "graphic.xaml", "graphic2.xaml" };
+            DirectoryInfo dirInfo = new DirectoryInfo(dbPath);
+            FileInfo[] info = dirInfo.GetFiles("*.xaml");
+            string[] files = new string[info.Length];
+            for (int i = 0; i < files.Length; ++i)
+                files[i] = info[i].Name;
             List<string> filesFound = new List<string>();
+            string shape;
+            if (shapeComboBox.SelectedItem.ToString() == "Triangle")
+                shape = "Polygon";
+            else
+                shape = shapeComboBox.SelectedItem.ToString();
             int numberOfShapes = 0;
-
             if(Int32.TryParse(numberOfShapesTextBox.Text, out numberOfShapes)){
-                foreach(var file in files)
-                {
-                    int x = int.Parse("FF0000FF", NumberStyles.HexNumber);
-                    if (searchResult(file, shapeComboBox.SelectedItem.ToString(), numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
-                        filesFound.Add(file);
-                }
-                searchResultWindow = new SearchResultWindow(filesFound);
+                if(attributeComboBox.SelectedIndex == 0)
+                    foreach(var file in files)
+                    {
+                        if (searchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
+                            filesFound.Add(file);
+                    }
+                else
+                    foreach (var file in files)
+                    {
+                        string attributeName = attributeComboBox.SelectedItem.ToString();
+                        string attributeValue = attributeValueComboBox.SelectedItem.ToString();
+                        if (searchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, colorDict[attributeValue]))
+                            filesFound.Add(file);
+                    }
+                searchResultWindow = new SearchResultWindow(filesFound, dbPath);
                 searchResultWindow.Show();
             }
         }
 
-        private bool searchResult(string fileName, string shapeName, int shapeCount, string comparison, string attrName, int attrVal)
+        private bool searchResult(string fileName, string shapeName, int shapeCount, string comparison, string attrName, string attrVal)
         {
             XmlDocument xml = new XmlDocument();
             xml.Load(fileName);
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xml.NameTable);
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
             XmlNodeList nodeList;
-            nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='#" + attrVal.ToString("X8")+ "']", nsMgr);
+            nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + attrVal + "']", nsMgr);
             switch (comparison)
             {
                 case "==":

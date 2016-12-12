@@ -19,9 +19,11 @@ namespace MMDB
     /// </summary>
     public partial class SearchResultWindow : Window
     {
-        public SearchResultWindow(List<string> fileNames)
+        private string dbPath;
+        public SearchResultWindow(List<string> fileNames, string dbPath)
         {
             InitializeComponent();
+            this.dbPath = dbPath;
             numberOfFilesLabel.Content = fileNames.Count.ToString();
             foreach (var file in fileNames)
                 filesFoundList.Items.Add(file);
@@ -31,7 +33,7 @@ namespace MMDB
         {
             if (filesFoundList.SelectedItem != null)
             {
-                GraphicPreviewWindow gpw = new GraphicPreviewWindow(filesFoundList.SelectedItem.ToString());
+                GraphicPreviewWindow gpw = new GraphicPreviewWindow(dbPath + filesFoundList.SelectedItem.ToString());
                 gpw.Show();
             }
         }

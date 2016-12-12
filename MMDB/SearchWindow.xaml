@@ -11,9 +11,10 @@
         <TextBox x:Name="numberOfShapesTextBox" HorizontalAlignment="Left" Height="23" Margin="145,85,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="34"/>
         <ComboBox x:Name="shapeComboBox" HorizontalAlignment="Left" Margin="7,86,0,0" VerticalAlignment="Top" Width="80"/>
         <Label x:Name="attrLabel" Content="WITH ATTRIBUTE" HorizontalAlignment="Left" Margin="1,112,0,0" VerticalAlignment="Top" Width="209" Foreground="Black" Height="26"/>
-        <ComboBox x:Name="comparison2ComboBox" HorizontalAlignment="Left" Margin="92,135,0,0" VerticalAlignment="Top" Width="48"/>
+        <Label x:Name="equalsLabel" Content="=" HorizontalAlignment="Left" Margin="89,131,0,0" VerticalAlignment="Top" Width="23" Foreground="Black" Height="26"/>
+        <!--<ComboBox x:Name="comparison2ComboBox" HorizontalAlignment="Left" Margin="92,135,0,0" VerticalAlignment="Top" Width="48"/>-->
         <ComboBox x:Name="attributeComboBox" HorizontalAlignment="Left" Margin="7,135,0,0" VerticalAlignment="Top" Width="80"/>
-        <ComboBox x:Name="attributeValueComboBox" HorizontalAlignment="Left" Margin="145,135,0,0" VerticalAlignment="Top" Width="80"/>
+        <ComboBox x:Name="attributeValueComboBox" HorizontalAlignment="Left" Margin="112,135,0,0" VerticalAlignment="Top" Width="80"/>
         <Button x:Name="searchButton" HorizontalAlignment="Left" Margin="245,112,-26,0" VerticalAlignment="Top" Width="75" Click="searchButton_Click" Style="{DynamicResource ButtonStyle}"/>
 
     </Grid>
