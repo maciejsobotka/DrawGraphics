@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -22,26 +23,40 @@ namespace MMDB
     public partial class SearchWindow : Window
     {
         private SearchResultWindow searchResultWindow;
+        private string[] symbols = { "==", "!=", ">", "<", ">=", "<=" };
+        private string[] shapes = { "Line", "Ellipse", "Rectangle", "Triangle" };
+
         public SearchWindow()
         {
             InitializeComponent();
+            folderPathTextBox.Text = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            foreach (var symbol in symbols)
+                comparisonComboBox.Items.Add(symbol);
+            comparisonComboBox.SelectedIndex = 0;
+            foreach (var shape in shapes)
+                shapeComboBox.Items.Add(shape);
+            shapeComboBox.SelectedIndex = 0;
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             string[] files = { "graphic.xaml", "graphic2.xaml" };
             List<string> filesFound = new List<string>();
-            foreach(var file in files)
-            {
-                int x = int.Parse("FF0000FF", NumberStyles.HexNumber);
-                if (searchResult(file, "Ellipse", 1, "Fill", x))
-                    filesFound.Add(file);
+            int numberOfShapes = 0;
+
+            if(Int32.TryParse(numberOfShapesTextBox.Text, out numberOfShapes)){
+                foreach(var file in files)
+                {
+                    int x = int.Parse("FF0000FF", NumberStyles.HexNumber);
+                    if (searchResult(file, shapeComboBox.SelectedItem.ToString(), numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
+                        filesFound.Add(file);
+                }
+                searchResultWindow = new SearchResultWindow(filesFound);
+                searchResultWindow.Show();
             }
-            searchResultWindow = new SearchResultWindow(filesFound);
-            searchResultWindow.Show();
         }
 
-        private bool searchResult(string fileName, string shapeName, int shapeCount, string attrName, int attrVal)
+        private bool searchResult(string fileName, string shapeName, int shapeCount, string comparison, string attrName, int attrVal)
         {
             XmlDocument xml = new XmlDocument();
             xml.Load(fileName);
@@ -49,12 +64,31 @@ namespace MMDB
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
             XmlNodeList nodeList;
             nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='#" + attrVal.ToString("X8")+ "']", nsMgr);
-            if (nodeList.Count >= shapeCount) return true;
-
+            switch (comparison)
+            {
+                case "==":
+                    if (nodeList.Count == shapeCount) return true;
+                    break;
+                case "!=":
+                    if (nodeList.Count != shapeCount) return true;
+                    break;
+                case ">":
+                    if (nodeList.Count > shapeCount) return true;
+                    break;
+                case "<":
+                    if (nodeList.Count < shapeCount) return true;
+                    break;
+                case ">=":
+                    if (nodeList.Count >= shapeCount) return true;
+                    break;
+                case "<=":
+                    if (nodeList.Count <= shapeCount) return true;
+                    break;
+            }
             return false;
         }
 
-        private bool searchResult(string fileName, string shapeName, int shapeCount)
+        private bool searchResult(string fileName, string shapeName, int shapeCount, string comparison)
         {
             XmlDocument xml = new XmlDocument();
             xml.Load(fileName);
@@ -62,10 +96,34 @@ namespace MMDB
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
             XmlNodeList nodeList;
             nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
-            if (nodeList.Count >= shapeCount) return true;
-
+            switch (comparison)
+            {
+                case "==": 
+                    if (nodeList.Count == shapeCount) return true;
+                    break;
+                case "!=":
+                    if (nodeList.Count != shapeCount) return true;
+                    break;
+                case ">":
+                    if (nodeList.Count > shapeCount) return true;
+                    break;
+                case "<":
+                    if (nodeList.Count < shapeCount) return true;
+                    break;
+                case ">=":
+                    if (nodeList.Count >= shapeCount) return true;
+                    break;
+                case "<=":
+                    if (nodeList.Count <= shapeCount) return true;
+                    break;
+            }
             return false;
 
+
+        }
+
+        private void changeFolderButton_Click(object sender, RoutedEventArgs e)
+        {
 
         }
     }

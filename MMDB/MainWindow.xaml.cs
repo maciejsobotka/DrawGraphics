@@ -291,7 +291,6 @@ namespace MMDB
                 {
                     int index = canvas.Children.IndexOf(clickedShape);
                     clickedShape.Resize(p1, p2);
-                    //canvas.Children[index] = clickedShape.Resize(p1, p2);
                     listOfObjects.Items[index] = clickedShape.ParametersToString();
                 }
             }
@@ -428,7 +427,6 @@ namespace MMDB
                 Point p2 = new Point(Convert.ToDouble(editWindow.x2.Text), Convert.ToDouble(editWindow.y2.Text));
                 int index = canvas.Children.IndexOf(clickedShape);
                 clickedShape.Resize(p1, p2);
-                //canvas.Children[index] = clickedShape.Resize(p1, p2);
                 listOfObjects.Items[index] = clickedShape.ParametersToString();
             }
             catch (FormatException) { }
