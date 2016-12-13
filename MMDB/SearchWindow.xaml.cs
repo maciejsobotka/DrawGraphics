@@ -35,7 +35,8 @@ namespace MMDB
         {
             InitializeComponent();
             InitializeColorDictionary();
-            dbPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            //dbPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString();
+            dbPath = "D:\\Sobot\\Programy\\Programy C#\\MMDB\\MMDB\\examples\\";
             folderPathTextBox.Text = dbPath;
             foreach (var symbol in symbols)
                 comparisonComboBox.Items.Add(symbol);

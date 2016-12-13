@@ -36,6 +36,7 @@ namespace MMDB
         private bool shapeCreated = false;
         private EditWindow editWindow = new EditWindow();
         private SearchWindow searchWindow;
+        private TableFormWindow tableFormWindow;
         public MainWindow()
         {
             InitializeComponent();
@@ -136,6 +137,11 @@ namespace MMDB
             {
                 searchWindow = new SearchWindow();
                 searchWindow.Show();
+            }
+            if (e.Key == Key.T && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                tableFormWindow = new TableFormWindow();
+                tableFormWindow.Show();
             }
         }
 
