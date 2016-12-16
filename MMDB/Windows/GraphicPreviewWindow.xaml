@@ -1,7 +1,7 @@
-﻿<Window x:Class="MMDB.GraphicPreviewWindow"
+﻿<Window x:Class="MMDB.Windows.GraphicPreviewWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="GraphicPreviewWindow" Height="620" Width="620" Topmost="True" Icon="content/icon_small.ico">
+        Title="GraphicPreviewWindow" Height="620" Width="620" Topmost="True" Icon="../content/icon_small.ico">
     <Grid>
         <Canvas x:Name="canvas"/>
     </Grid>

@@ -64,33 +64,36 @@
     <Compile Include="Extensions\ShapeExtensions.cs" />
     <Compile Include="Extensions\TriangleExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
-    <Compile Include="GraphicPreviewWindow.xaml.cs">
+    <Compile Include="Windows\GraphicPreviewWindow.xaml.cs">
       <DependentUpon>GraphicPreviewWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ResizeWindow.xaml.cs">
+    <Compile Include="Windows\ResizeWindow.xaml.cs">
       <DependentUpon>ResizeWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Enums.cs" />
-    <Compile Include="SearchResultWindow.xaml.cs">
+    <Compile Include="Enums\Enums.cs" />
+    <Compile Include="Windows\SearchResultWindow.xaml.cs">
       <DependentUpon>SearchResultWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SearchWindow.xaml.cs">
+    <Compile Include="Windows\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="TableFormWindow.xaml.cs">
+    <Compile Include="Windows\SQLWindow.xaml.cs">
+      <DependentUpon>SQLWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TableFormWindow.xaml.cs">
       <DependentUpon>TableFormWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\TableToFromDB.cs" />
     <Compile Include="Utils\TableToFromXML.cs" />
-    <Page Include="GraphicPreviewWindow.xaml">
+    <Page Include="Windows\GraphicPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ResizeWindow.xaml">
+    <Page Include="Windows\ResizeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FunctionButtonsDictionary.xaml">
+    <Page Include="StyleDictionaries\FunctionButtonsDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -106,19 +109,23 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="MenuDictionary.xaml">
+    <Page Include="StyleDictionaries\MenuDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SearchResultWindow.xaml">
+    <Page Include="Windows\SearchResultWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SearchWindow.xaml">
+    <Page Include="Windows\SearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TableFormWindow.xaml">
+    <Page Include="Windows\SQLWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TableFormWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,7 +191,12 @@
   <ItemGroup>
     <Resource Include="content\remove.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="content\resize.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="content\play.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

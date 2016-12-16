@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MMDB
+namespace MMDB.Windows
 {
     /// <summary>
     /// Interaction logic for TableFormWindow.xaml
@@ -24,6 +24,7 @@ namespace MMDB
         private DataTable dt;
         private TableToFromXML ttfXML;
         private TableToFromDB ttfDB;
+        private SQLWindow sqlWindow;
         public TableFormWindow()
         {
             InitializeComponent();
@@ -82,6 +83,15 @@ namespace MMDB
         private void buttonFromDB_Click(object sender, RoutedEventArgs e)
         {
             dt = ttfDB.GetDataFromDB(tableGrid, "dataTable");
-}
+        }
+
+        void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                sqlWindow = new SQLWindow();
+                sqlWindow.Show();
+            }
+        }
     }
 }

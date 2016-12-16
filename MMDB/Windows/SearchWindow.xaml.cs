@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml;
 
-namespace MMDB
+namespace MMDB.Windows
 {
     /// <summary>
     /// Interaction logic for SearchWindow.xaml

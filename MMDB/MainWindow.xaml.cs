@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MMDB.Extensions;
+using MMDB.Utils;
+using MMDB.Windows;
+using MMDB.Enums;
 
 namespace MMDB
 {

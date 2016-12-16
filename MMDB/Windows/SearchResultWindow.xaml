@@ -1,7 +1,7 @@
-﻿<Window x:Class="MMDB.SearchResultWindow"
+﻿<Window x:Class="MMDB.Windows.SearchResultWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SearchResultWindow" Height="274" Width="186" ResizeMode="CanMinimize" Topmost="True" Icon="content/icon_small.ico" WindowStartupLocation="CenterScreen">
+        Title="SearchResultWindow" Height="274" Width="186" ResizeMode="CanMinimize" Topmost="True" Icon="../content/icon_small.ico" WindowStartupLocation="CenterScreen">
     <Grid Background="Black">
         <Label x:Name="numberOfFilesLabel" Content="0" HorizontalAlignment="Left" Height="24" Margin="10,2,0,0" VerticalAlignment="Top" Width="30" Foreground="White"/>
         <Label x:Name="filesFoundLabel" Content="file(s) found:" HorizontalAlignment="Left" Height="24" Margin="30,2,0,0" VerticalAlignment="Top" Width="85" Foreground="White"/>

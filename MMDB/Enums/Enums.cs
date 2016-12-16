@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MMDB
+namespace MMDB.Enums
 {
     enum Shapes { None, Line, Ellipse, Rectangle, Triangle }
     enum Operations { None, Paint, Grab, Remove, Resize }
