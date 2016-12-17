@@ -25,7 +25,7 @@
                 <MenuItem x:Name="newFile" Header="New..." Foreground="White" Background="Black" Click="NewFile_Click" InputGestureText="Ctrl+N" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave" BorderBrush="Black"/>
                 <MenuItem x:Name="openFile" Header="Open..." Foreground="White" Background="Black" Click="OpenFile_Click" InputGestureText="Ctrl+O" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave"/>
                 <Separator Style="{DynamicResource SeparatorStyle}"/>
-                <MenuItem x:Name="saveFile" Header="Save As..." Foreground="Gray" Background="Black" Click="SaveFile_Click" InputGestureText="Ctrl+S" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave"/>
+                <MenuItem x:Name="saveFile" Header="Save As..." Foreground="Gray" Background="Black" Click="SaveFile_Click" InputGestureText="Ctrl+S" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave" IsEnabled="False"/>
 
             </MenuItem>
         </Menu>

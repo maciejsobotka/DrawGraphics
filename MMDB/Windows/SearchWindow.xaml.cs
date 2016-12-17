@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -24,10 +25,10 @@ namespace MMDB.Windows
     public partial class SearchWindow : Window
     {
         private SearchResultWindow searchResultWindow;
-        private string[] symbols = { "==", "!=", ">", "<", ">=", "<=" };
-        private string[] shapes = { "Line", "Ellipse", "Rectangle", "Triangle" };
-        private string[] attributes = { "None", "Fill", "Stroke" };
-        private string[] colors = { "White", "Black", "Gray", "Red", "Green", "Blue" };
+        private readonly string[] symbols = { "==", "!=", ">", "<", ">=", "<=" };
+        private readonly string[] shapes = { "Line", "Ellipse", "Rectangle", "Triangle" };
+        private readonly string[] attributes = { "None", "Fill", "Stroke" };
+        private readonly string[] colors = { "White", "Black", "Gray", "Red", "Green", "Blue" };
         private Dictionary<string, string> colorDict;
         private string dbPath;
 
@@ -54,13 +55,15 @@ namespace MMDB.Windows
 
         private void InitializeColorDictionary()
         {
-            colorDict = new Dictionary<string, string>();
-            colorDict.Add("White", "#FFFFFFFF");
-            colorDict.Add("Black", "#FF000000");
-            colorDict.Add("Gray", "#FF808080");
-            colorDict.Add("Red", "#FFFF0000");
-            colorDict.Add("Green", "#FF008000");
-            colorDict.Add("Blue", "#FF0000FF");
+            colorDict = new Dictionary<string, string>
+            {
+                {"White", "#FFFFFFFF"},
+                {"Black", "#FF000000"},
+                {"Gray", "#FF808080"},
+                {"Red", "#FFFF0000"},
+                {"Green", "#FF008000"},
+                {"Blue", "#FF0000FF"}
+            };
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
@@ -103,29 +106,29 @@ namespace MMDB.Windows
             xml.Load(fileName);
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xml.NameTable);
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            XmlNodeList nodeList;
-            nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + attrVal + "']", nsMgr);
-            switch (comparison)
-            {
-                case "==":
-                    if (nodeList.Count == shapeCount) return true;
-                    break;
-                case "!=":
-                    if (nodeList.Count != shapeCount) return true;
-                    break;
-                case ">":
-                    if (nodeList.Count > shapeCount) return true;
-                    break;
-                case "<":
-                    if (nodeList.Count < shapeCount) return true;
-                    break;
-                case ">=":
-                    if (nodeList.Count >= shapeCount) return true;
-                    break;
-                case "<=":
-                    if (nodeList.Count <= shapeCount) return true;
-                    break;
-            }
+            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + attrVal + "']", nsMgr);
+            if (nodeList != null)
+                switch (comparison)
+                {
+                    case "==":
+                        if (nodeList.Count == shapeCount) return true;
+                        break;
+                    case "!=":
+                        if (nodeList.Count != shapeCount) return true;
+                        break;
+                    case ">":
+                        if (nodeList.Count > shapeCount) return true;
+                        break;
+                    case "<":
+                        if (nodeList.Count < shapeCount) return true;
+                        break;
+                    case ">=":
+                        if (nodeList.Count >= shapeCount) return true;
+                        break;
+                    case "<=":
+                        if (nodeList.Count <= shapeCount) return true;
+                        break;
+                }
             return false;
         }
 
@@ -135,29 +138,29 @@ namespace MMDB.Windows
             xml.Load(fileName);
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(xml.NameTable);
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            XmlNodeList nodeList;
-            nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
-            switch (comparison)
-            {
-                case "==": 
-                    if (nodeList.Count == shapeCount) return true;
-                    break;
-                case "!=":
-                    if (nodeList.Count != shapeCount) return true;
-                    break;
-                case ">":
-                    if (nodeList.Count > shapeCount) return true;
-                    break;
-                case "<":
-                    if (nodeList.Count < shapeCount) return true;
-                    break;
-                case ">=":
-                    if (nodeList.Count >= shapeCount) return true;
-                    break;
-                case "<=":
-                    if (nodeList.Count <= shapeCount) return true;
-                    break;
-            }
+            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
+            if(nodeList!=null)
+                switch (comparison)
+                {
+                    case "==": 
+                        if (nodeList.Count == shapeCount) return true;
+                        break;
+                    case "!=":
+                        if (nodeList.Count != shapeCount) return true;
+                        break;
+                    case ">":
+                        if (nodeList.Count > shapeCount) return true;
+                        break;
+                    case "<":
+                        if (nodeList.Count < shapeCount) return true;
+                        break;
+                    case ">=":
+                        if (nodeList.Count >= shapeCount) return true;
+                        break;
+                    case "<=":
+                        if (nodeList.Count <= shapeCount) return true;
+                        break;
+                }
             return false;
 
 
@@ -165,7 +168,10 @@ namespace MMDB.Windows
 
         private void changeFolderButton_Click(object sender, RoutedEventArgs e)
         {
-
+            FolderBrowserDialog folderBrowserDialogSource = new FolderBrowserDialog();
+            folderBrowserDialogSource.ShowDialog();
+            dbPath = folderBrowserDialogSource.SelectedPath;
+            folderPathTextBox.Text = dbPath;
         }
     }
 }

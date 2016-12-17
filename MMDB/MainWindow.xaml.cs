@@ -151,37 +151,13 @@ namespace MMDB
         private void menuOption_MouseEnter(object sender, MouseEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            switch (menuItem.Name)
-            {
-                case "newFile":
-                    newFile.Foreground = Brushes.Black;
-                    break;
-                case "openFile":
-                    openFile.Foreground = Brushes.Black;
-                    break;
-                case "saveFile":
-                    if (graphicNew || graphicLoaded)
-                        saveFile.Foreground = Brushes.Black;
-                    break;
-            }
+            menuItem.Foreground = Brushes.Black;
         }
 
         private void menuOption_MouseLeave(object sender, MouseEventArgs e)
         {
             MenuItem menuItem = (MenuItem)sender;
-            switch (menuItem.Name)
-            {
-                case "newFile":
-                    newFile.Foreground = Brushes.White;
-                    break;
-                case "openFile":
-                    openFile.Foreground = Brushes.White;
-                    break;
-                case "saveFile":
-                    if(graphicNew || graphicLoaded)
-                        saveFile.Foreground = Brushes.White;
-                    break;
-            }
+            menuItem.Foreground = Brushes.White;
         }
 
         private void EnableButtons()
@@ -195,6 +171,8 @@ namespace MMDB
             grabButton.IsEnabled = true;
             removeButton.IsEnabled = true;
             editButton.IsEnabled = true;
+
+            saveFile.IsEnabled = true;
         }
 
         private void ClearObjects()
