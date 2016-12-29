@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace MMDB.Utils
 {
-    class TableToFromXML
+    internal class TableToFromXml
     {
-        public void SaveDataToXML(DataTable dataTable, string tableName)
-        {
-            dataTable.WriteXml(tableName + ".xml");
-        }
+        #region Public methods
 
-        public DataTable GetDataFromXML(DataGrid dataGrid, string tableName)
+        public DataTable GetDataFromXml(DataGrid dataGrid, string tableName)
         {
-            DataTable dataTable = new DataTable(tableName);
+            var dataTable = new DataTable(tableName);
             if (!File.Exists(tableName + ".xml")) return null;
 
-            DataSet ds = new DataSet();
+            var ds = new DataSet();
             ds.ReadXml(tableName + ".xml");
             dataTable = ds.Tables[0];
             dataGrid.DataContext = dataTable.DefaultView;
@@ -29,5 +21,12 @@ namespace MMDB.Utils
 
             return dataTable;
         }
+
+        public void SaveDataToXml(DataTable dataTable, string tableName)
+        {
+            dataTable.WriteXml(tableName + ".xml");
+        }
+
+        #endregion
     }
 }

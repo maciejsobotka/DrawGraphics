@@ -1,13 +1,18 @@
 ﻿<Window x:Class="MMDB.Windows.SQLWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SQLWindow" Height="420" Width="640" ResizeMode="CanMinimize" Topmost="True" Icon="../content/icon_small.ico" WindowStartupLocation="CenterScreen">
+        Title="SQLWindow" Height="420" Width="640" ResizeMode="CanMinimize" Topmost="True"
+        Icon="../content/icon_small.ico" WindowStartupLocation="CenterScreen">
     <Window.Resources>
-        <Image x:Key="play" Source="../content/play.png"/>
+        <Image x:Key="play" Source="../content/play.png" />
     </Window.Resources>
     <Grid Background="Black">
-        <Button x:Name="lineButton" Content="{StaticResource play}" HorizontalAlignment="Left" Margin="0,0,0,0" VerticalAlignment="Top" Width="75" Click="startScriptButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <RichTextBox HorizontalAlignment="Center" Height="174" Margin="0,22,0,0" VerticalAlignment="Top" Width="Auto" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
-        <RichTextBox HorizontalAlignment="Center" Height="196" Margin="0,198,0,0" VerticalAlignment="Top" Width="Auto" IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible"/>
+        <Button x:Name="lineButton" Content="{StaticResource play}" HorizontalAlignment="Left" Margin="0,0,0,0"
+                VerticalAlignment="Top" Width="75" Click="startScriptButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <RichTextBox HorizontalAlignment="Center" Height="174" Margin="0,22,0,0" VerticalAlignment="Top" Width="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible" />
+        <RichTextBox HorizontalAlignment="Center" Height="196" Margin="0,198,0,0" VerticalAlignment="Top" Width="Auto"
+                     IsReadOnly="True" ScrollViewer.VerticalScrollBarVisibility="Visible" />
     </Grid>
 </Window>

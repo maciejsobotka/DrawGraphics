@@ -1,61 +1,103 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        x:Class="MMDB.MainWindow"
-        Title="MMDB" Height="764" Width="1024" Background="#FFA8A8A8" Icon="content/icon_small.ico">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="MMDB.MainWindow"
+    Title="MMDB" Height="764" Width="1024" Background="#FFA8A8A8" Icon="content/icon_small.ico">
     <Window.Resources>
-        <Image x:Key="black" Source="/content/black.png"/>
-        <Image x:Key="gray" Source="/content/gray.png"/>
-        <Image x:Key="white" Source="/content/white.png"/>
-        <Image x:Key="red" Source="/content/red.png"/>
-        <Image x:Key="green" Source="/content/green.png"/>
-        <Image x:Key="blue" Source="/content/blue.png"/>
-        <Image x:Key="line" Source="/content/line.png"/>
-        <Image x:Key="ellipse" Source="/content/ellipse.png"/>
-        <Image x:Key="rectangle" Source="/content/rectangle.png"/>
-        <Image x:Key="triangle" Source="/content/triangle.png"/>
-        <Image x:Key="paint" Source="/content/paint.png"/>
-        <Image x:Key="grab" Source="/content/grab.png"/>
-        <Image x:Key="remove" Source="/content/remove.png"/>
-        <Image x:Key="resize" Source="/content/resize.png"/>
+        <Image x:Key="black" Source="/content/black.png" />
+        <Image x:Key="gray" Source="/content/gray.png" />
+        <Image x:Key="white" Source="/content/white.png" />
+        <Image x:Key="red" Source="/content/red.png" />
+        <Image x:Key="green" Source="/content/green.png" />
+        <Image x:Key="blue" Source="/content/blue.png" />
+        <Image x:Key="line" Source="/content/line.png" />
+        <Image x:Key="ellipse" Source="/content/ellipse.png" />
+        <Image x:Key="rectangle" Source="/content/rectangle.png" />
+        <Image x:Key="triangle" Source="/content/triangle.png" />
+        <Image x:Key="paint" Source="/content/paint.png" />
+        <Image x:Key="grab" Source="/content/grab.png" />
+        <Image x:Key="remove" Source="/content/remove.png" />
+        <Image x:Key="resize" Source="/content/resize.png" />
     </Window.Resources>
     <Grid x:Name="grid">
         <Menu Width="Auto" Height="24" VerticalAlignment="Top" Foreground="White" Background="Black">
             <MenuItem x:Name="fileMenu" Header="File" Background="Black" Style="{DynamicResource MenuItemStyle}">
-                <MenuItem x:Name="newFile" Header="New..." Foreground="White" Background="Black" Click="NewFile_Click" InputGestureText="Ctrl+N" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave" BorderBrush="Black"/>
-                <MenuItem x:Name="openFile" Header="Open..." Foreground="White" Background="Black" Click="OpenFile_Click" InputGestureText="Ctrl+O" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave"/>
-                <Separator Style="{DynamicResource SeparatorStyle}"/>
-                <MenuItem x:Name="saveFile" Header="Save As..." Foreground="Gray" Background="Black" Click="SaveFile_Click" InputGestureText="Ctrl+S" MouseEnter="menuOption_MouseEnter" MouseLeave="menuOption_MouseLeave" IsEnabled="False"/>
+                <MenuItem x:Name="newFile" Header="New..." Foreground="White" Background="Black" Click="NewFile_Click"
+                          InputGestureText="Ctrl+N" MouseEnter="menuOption_MouseEnter"
+                          MouseLeave="menuOption_MouseLeave" BorderBrush="Black" />
+                <MenuItem x:Name="openFile" Header="Open..." Foreground="White" Background="Black"
+                          Click="OpenFile_Click" InputGestureText="Ctrl+O" MouseEnter="menuOption_MouseEnter"
+                          MouseLeave="menuOption_MouseLeave" />
+                <Separator Style="{DynamicResource SeparatorStyle}" />
+                <MenuItem x:Name="saveFile" Header="Save As..." Foreground="Gray" Background="Black"
+                          Click="SaveFile_Click" InputGestureText="Ctrl+S" MouseEnter="menuOption_MouseEnter"
+                          MouseLeave="menuOption_MouseLeave" IsEnabled="False" />
 
             </MenuItem>
         </Menu>
-        <Rectangle x:Name="fillRectangle" HorizontalAlignment="Left" Height="30" Margin="50,506,0,0" VerticalAlignment="Top" Width="30" Stroke="Black"/>
-        <Rectangle x:Name="strokeRectangle" HorizontalAlignment="Left" Height="30" Margin="50,541,0,0" VerticalAlignment="Top" Width="30" Stroke="Black"/>
-        <Label Content="Fill:" HorizontalAlignment="Left" Height="24" Margin="5,506,0,0" VerticalAlignment="Top" Width="45" RenderTransformOrigin="0.25,0.4" FontStyle="Italic"/>
-        <Label Content="Stroke:" HorizontalAlignment="Left" Height="24" Margin="5,541,0,0" VerticalAlignment="Top" Width="45" FontStyle="Italic"/>
+        <Rectangle x:Name="fillRectangle" HorizontalAlignment="Left" Height="30" Margin="50,506,0,0"
+                   VerticalAlignment="Top" Width="30" Stroke="Black" />
+        <Rectangle x:Name="strokeRectangle" HorizontalAlignment="Left" Height="30" Margin="50,541,0,0"
+                   VerticalAlignment="Top" Width="30" Stroke="Black" />
+        <Label Content="Fill:" HorizontalAlignment="Left" Height="24" Margin="5,506,0,0" VerticalAlignment="Top"
+               Width="45" RenderTransformOrigin="0.25,0.4" FontStyle="Italic" />
+        <Label Content="Stroke:" HorizontalAlignment="Left" Height="24" Margin="5,541,0,0" VerticalAlignment="Top"
+               Width="45" FontStyle="Italic" />
 
-        <TextBox x:Name="textBoxFileName" Height="23" Margin="-200,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="200" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..." Cursor="Arrow" IsEnabled="False"/>
-        <TextBox x:Name="textBoxCoords" Height="23" Margin="-475,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="74" Cursor="Arrow" IsEnabled="False" Foreground="Black"/>
-        
-        <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove"/>
+        <TextBox x:Name="textBoxFileName" Height="23" Margin="-200,0,0,0" TextWrapping="Wrap"
+                 VerticalAlignment="Bottom" Width="200" Foreground="#FFBFBFBF" FontStyle="Italic" Text="File Name..."
+                 Cursor="Arrow" IsEnabled="False" />
+        <TextBox x:Name="textBoxCoords" Height="23" Margin="-475,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom"
+                 Width="74" Cursor="Arrow" IsEnabled="False" Foreground="Black" />
 
-        <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250" HorizontalAlignment="Right"/>
+        <Canvas x:Name="canvas" Margin="125,25,300,23" MouseDown="canvas_MouseDown" MouseMove="canvas_MouseMove" />
 
-        <Button x:Name="lineButton" Content="{StaticResource line}" HorizontalAlignment="Left" Margin="10,45,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="ellipseButton" Content="{StaticResource ellipse}" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="rectangleButton" Content="{StaticResource rectangle}" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="triangleButton" Content="{StaticResource triangle}" HorizontalAlignment="Left" Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <ListBox x:Name="listOfObjects" Height="600" Margin="0,30,20,0" VerticalAlignment="Top" Width="250"
+                 HorizontalAlignment="Right" />
 
-        <Button x:Name="paintButton" Content="{StaticResource paint}" HorizontalAlignment="Left" Margin="10,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="grabButton" Content="{StaticResource grab}" HorizontalAlignment="Left" Margin="34,199,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="removeButton" Content="{StaticResource remove}" HorizontalAlignment="Left" Margin="10,223,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="editButton" Content="{StaticResource resize}" HorizontalAlignment="Left" Margin="34,223,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="lineButton" Content="{StaticResource line}" HorizontalAlignment="Left" Margin="10,45,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="ellipseButton" Content="{StaticResource ellipse}" HorizontalAlignment="Left" Margin="10,72,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="rectangleButton" Content="{StaticResource rectangle}" HorizontalAlignment="Left"
+                Margin="10,99,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="triangleButton" Content="{StaticResource triangle}" HorizontalAlignment="Left"
+                Margin="10,127,0,0" VerticalAlignment="Top" Width="75" IsEnabled="False" Click="shapeButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
 
-        <Button x:Name="whiteButton" Content="{StaticResource white}"  HorizontalAlignment="Left" Margin="10,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="blackButton" Content="{StaticResource black}" HorizontalAlignment="Left" Margin="34,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="grayButton" Content="{StaticResource gray}" HorizontalAlignment="Left" Margin="58,452,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="redButton" Content="{StaticResource red}"  HorizontalAlignment="Left" Margin="10,476,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="greenButton" Content="{StaticResource green}" HorizontalAlignment="Left" Margin="34,476,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
-        <Button x:Name="blueButton" Content="{StaticResource blue}" HorizontalAlignment="Left" Margin="58,476,0,0" VerticalAlignment="Top" Width="20" Click="colorButton_Click" MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}"/>
+        <Button x:Name="paintButton" Content="{StaticResource paint}" HorizontalAlignment="Left" Margin="10,199,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="grabButton" Content="{StaticResource grab}" HorizontalAlignment="Left" Margin="34,199,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="removeButton" Content="{StaticResource remove}" HorizontalAlignment="Left" Margin="10,223,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="editButton" Content="{StaticResource resize}" HorizontalAlignment="Left" Margin="34,223,0,0"
+                VerticalAlignment="Top" Width="75" IsEnabled="False" Click="operationButton_Click"
+                Style="{DynamicResource ButtonStyle}" />
+
+        <Button x:Name="whiteButton" Content="{StaticResource white}" HorizontalAlignment="Left" Margin="10,452,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="blackButton" Content="{StaticResource black}" HorizontalAlignment="Left" Margin="34,452,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="grayButton" Content="{StaticResource gray}" HorizontalAlignment="Left" Margin="58,452,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="redButton" Content="{StaticResource red}" HorizontalAlignment="Left" Margin="10,476,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="greenButton" Content="{StaticResource green}" HorizontalAlignment="Left" Margin="34,476,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
+        <Button x:Name="blueButton" Content="{StaticResource blue}" HorizontalAlignment="Left" Margin="58,476,0,0"
+                VerticalAlignment="Top" Width="20" Click="colorButton_Click"
+                MouseRightButtonDown="colorButton_MouseRightButtonDown" Style="{DynamicResource ButtonStyle}" />
     </Grid>
 </Window>

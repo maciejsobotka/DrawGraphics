@@ -1,11 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MMDB.Enums
+﻿namespace MMDB.Enums
 {
-    enum Shapes { None, Line, Ellipse, Rectangle, Triangle }
-    enum Operations { None, Paint, Grab, Remove, Resize }
+    internal enum Shapes
+    {
+        None,
+        Line,
+        Ellipse,
+        Rectangle,
+        Triangle
+    }
+
+    internal enum Operations
+    {
+        None,
+        Paint,
+        Grab,
+        Remove,
+        Resize
+    }
 }

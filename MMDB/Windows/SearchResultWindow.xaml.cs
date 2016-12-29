@@ -1,25 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MMDB.Windows
 {
     /// <summary>
-    /// Interaction logic for SearchResultWindow.xaml
+    ///     Interaction logic for SearchResultWindow.xaml
     /// </summary>
     public partial class SearchResultWindow : Window
     {
-        private string dbPath;
+        #region Private fields
+
+        private readonly string dbPath;
+
+        #endregion
+        #region Ctors
+
         public SearchResultWindow(List<string> fileNames, string dbPath)
         {
             InitializeComponent();
@@ -29,13 +25,18 @@ namespace MMDB.Windows
                 filesFoundList.Items.Add(file);
         }
 
+        #endregion
+        #region Private methods
+
         private void filesFoundList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (filesFoundList.SelectedItem != null)
             {
-                GraphicPreviewWindow gpw = new GraphicPreviewWindow(dbPath + filesFoundList.SelectedItem.ToString());
+                var gpw = new GraphicPreviewWindow(dbPath + filesFoundList.SelectedItem);
                 gpw.Show();
             }
         }
+
+        #endregion
     }
 }

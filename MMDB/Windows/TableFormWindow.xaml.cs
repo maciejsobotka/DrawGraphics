@@ -1,41 +1,72 @@
-﻿using MMDB.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using MMDB.Utils;
 
 namespace MMDB.Windows
 {
     /// <summary>
-    /// Interaction logic for TableFormWindow.xaml
+    ///     Interaction logic for TableFormWindow.xaml
     /// </summary>
     public partial class TableFormWindow : Window
     {
-        private DataTable dt;
-        private TableToFromXML ttfXML;
-        private TableToFromDB ttfDB;
-        private SQLWindow sqlWindow;
+        #region Private fields
+
+        private DataTable m_Dt;
+        private SQLWindow m_SqlWindow;
+        private readonly TableToFromDb m_TtfDb;
+        private readonly TableToFromXml m_TtfXml;
+
+        #endregion
+        #region Ctors
+
         public TableFormWindow()
         {
             InitializeComponent();
-            ttfXML = new TableToFromXML();
-            ttfDB = new TableToFromDB();
-            dt = InitializeDataGrid(tableGrid, "dataTable");
+            m_TtfXml = new TableToFromXml();
+            m_TtfDb = new TableToFromDb();
+            m_Dt = InitializeDataGrid(tableGrid, "dataTable");
+        }
+
+        #endregion
+        #region Private methods
+
+        private void buttonFromDB_Click(object sender, RoutedEventArgs e)
+        {
+            m_Dt = m_TtfDb.GetDataFromDb(tableGrid, "dataTable");
+        }
+
+        private void buttonFromXML_Click(object sender, RoutedEventArgs e)
+        {
+            m_Dt = m_TtfXml.GetDataFromXml(tableGrid, "dataTable");
+        }
+
+        private void buttonToDB_Click(object sender, RoutedEventArgs e)
+        {
+            m_TtfDb.SaveDataToDb(m_Dt, "dataTable");
+        }
+
+        private void buttonToXML_Click(object sender, RoutedEventArgs e)
+        {
+            m_TtfXml.SaveDataToXml(m_Dt, "dataTable");
+        }
+
+        private DataTable GenerateRows(DataTable dataTable)
+        {
+            dataTable.Rows.Add(1, "Jan", "Kowalski", 124436, DateTime.Now, "graphic5");
+            dataTable.Rows.Add(2, "Izabela", "Skorpion", 114515, DateTime.Now, "graphic");
+            dataTable.Rows.Add(3, "Grzegorz", "Cebula", 131234, DateTime.Now, "graphic2");
+            dataTable.Rows.Add(4, "Joanna", "Palec", 156789, DateTime.Now, "graphic4");
+            dataTable.Rows.Add(5, "Ewa", "Kot", 185367, DateTime.Now, "graphic3");
+
+            return dataTable;
         }
 
         private DataTable InitializeDataGrid(DataGrid dataGrid, string tableName)
         {
-            DataTable dataTable = ttfXML.GetDataFromXML(dataGrid, tableName);
+            var dataTable = m_TtfXml.GetDataFromXml(dataGrid, tableName);
             if (dataTable == null)
             {
                 dataTable = new DataTable("dataTable");
@@ -54,44 +85,15 @@ namespace MMDB.Windows
             return dataTable;
         }
 
-        private DataTable GenerateRows(DataTable dataTable)
-        {
-            dataTable.Rows.Add(1, "Jan", "Kowalski", 124436, DateTime.Now, "graphic5");
-            dataTable.Rows.Add(2, "Izabela", "Skorpion",114515, DateTime.Now, "graphic");
-            dataTable.Rows.Add(3, "Grzegorz", "Cebula", 131234, DateTime.Now, "graphic2");
-            dataTable.Rows.Add(4, "Joanna", "Palec", 156789, DateTime.Now ,"graphic4");
-            dataTable.Rows.Add(5, "Ewa", "Kot", 185367, DateTime.Now, "graphic3");
-
-            return dataTable;
-        }
-
-        private void buttonToXML_Click(object sender, RoutedEventArgs e)
-        {
-            ttfXML.SaveDataToXML(dt, "dataTable");
-        }
-
-        private void buttonFromXML_Click(object sender, RoutedEventArgs e)
-        {
-            dt = ttfXML.GetDataFromXML(tableGrid, "dataTable");
-        }
-
-        private void buttonToDB_Click(object sender, RoutedEventArgs e)
-        {
-            ttfDB.SaveDataToDB(dt, "dataTable");
-        }
-
-        private void buttonFromDB_Click(object sender, RoutedEventArgs e)
-        {
-            dt = ttfDB.GetDataFromDB(tableGrid, "dataTable");
-        }
-
-        void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                sqlWindow = new SQLWindow();
-                sqlWindow.Show();
+                m_SqlWindow = new SQLWindow();
+                m_SqlWindow.Show();
             }
         }
+
+        #endregion
     }
 }

@@ -1,31 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows.Controls;
 
 namespace MMDB.Utils
 {
-    class TableToFromDB
+    internal class TableToFromDb
     {
-        public void SaveDataToDB(DataTable dataTable, string tableName)
-        {
+        #region Constants
 
-        }
+        private const string CONNETION_S = "";
 
-        public DataTable GetDataFromDB(DataGrid dataGrid, string tableName)
+        #endregion
+        #region Public methods
+
+        public DataTable GetDataFromDb(DataGrid dataGrid, string tableName)
         {
-            DataTable dataTable = new DataTable(tableName);
+            var dataTable = new DataTable(tableName);
             dataGrid.DataContext = dataTable.DefaultView;
             dataGrid.ColumnWidth = 80;
             return dataTable;
         }
 
-        private string GetConnectionString()
+        public void SaveDataToDb(DataTable dataTable, string tableName)
         {
-            return "";
         }
+
+        #endregion
     }
 }

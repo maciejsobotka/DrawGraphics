@@ -1,31 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MMDB.Windows
 {
     /// <summary>
-    /// Interaction logic for EditWindow.xaml
+    ///     Interaction logic for EditWindow.xaml
     /// </summary>
     public partial class EditWindow : Window
     {
-        public event EventHandler MyEvent;
-        private bool iSDataSet = false;
+        #region Private fields
+
+        private bool iSDataSet;
+
+        #endregion
+        #region Ctors
+
         public EditWindow()
         {
             InitializeComponent();
-            
         }
+
+        #endregion
+        #region Public methods
 
         public void SetShapeData(Point p1, Point p2)
         {
@@ -36,10 +33,16 @@ namespace MMDB.Windows
             iSDataSet = true;
         }
 
+        #endregion
+        #region Private methods
+
         private void point_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(iSDataSet)
-                this.MyEvent(this, EventArgs.Empty);
+            if (iSDataSet)
+                MyEvent(this, EventArgs.Empty);
         }
+
+        #endregion
+        public event EventHandler MyEvent;
     }
 }
