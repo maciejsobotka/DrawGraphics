@@ -4,25 +4,26 @@ using System.Windows.Controls;
 
 namespace MMDB.Utils
 {
-    internal class TableToFromXml
+    public static class TableToFromXml
     {
-        #region Public methods
+        #region Public static methods
 
-        public DataTable GetDataFromXml(DataGrid dataGrid, string tableName)
+        public static DataTable GetDataFromXml(DataGrid dataGrid, string tableName)
         {
-            var dataTable = new DataTable(tableName);
-            if (!File.Exists(tableName + ".xml")) return null;
+            if (!File.Exists(tableName + ".xml"))
+            {
+                return null;
+            }
 
             var ds = new DataSet();
             ds.ReadXml(tableName + ".xml");
-            dataTable = ds.Tables[0];
+            var dataTable = ds.Tables[0];
             dataGrid.DataContext = dataTable.DefaultView;
-            dataGrid.ColumnWidth = 80;
 
             return dataTable;
         }
 
-        public void SaveDataToXml(DataTable dataTable, string tableName)
+        public static void SaveDataToXml(DataTable dataTable, string tableName)
         {
             dataTable.WriteXml(tableName + ".xml");
         }

@@ -32,7 +32,7 @@ namespace MMDB
         private SearchWindow searchWindow;
         private bool shapeCreated;
         private Shapes shapeType = Shapes.None;
-        private TableFormWindow tableFormWindow;
+        private TablePlusSqlWindow tableFormWindow;
 
         #endregion
         #region Ctors
@@ -427,7 +427,7 @@ namespace MMDB
             }
             if (e.Key == Key.T && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                tableFormWindow = new TableFormWindow();
+                tableFormWindow = new TablePlusSqlWindow();
                 tableFormWindow.Show();
             }
         }

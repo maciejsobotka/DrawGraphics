@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -28,7 +29,7 @@ namespace MMDB.Windows
         {
             InitializeComponent();
             InitializeColorDictionary();
-            m_DbPath = System.AppDomain.CurrentDomain.BaseDirectory.ToString() + "..\\..\\examples\\";
+            m_DbPath = AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\";
             //m_DbPath = "D:\\Sobot\\Programy\\Programy C#\\MMDB\\MMDB\\examples\\";
             folderPathTextBox.Text = m_DbPath;
             foreach (var symbol in m_Symbols)

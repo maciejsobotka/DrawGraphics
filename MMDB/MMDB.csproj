@@ -77,14 +77,14 @@
     <Compile Include="Windows\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\SQLWindow.xaml.cs">
-      <DependentUpon>SQLWindow.xaml</DependentUpon>
+    <Compile Include="Windows\SqlWindow.xaml.cs">
+      <DependentUpon>SqlWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\TableFormWindow.xaml.cs">
-      <DependentUpon>TableFormWindow.xaml</DependentUpon>
+    <Compile Include="Windows\TablePlusSqlWindow.xaml.cs">
+      <DependentUpon>TablePlusSqlWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\TableToFromDB.cs" />
-    <Compile Include="Utils\TableToFromXML.cs" />
+    <Compile Include="Utils\TableToFromDb.cs" />
+    <Compile Include="Utils\TableToFromXml.cs" />
     <Page Include="Windows\GraphicPreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,11 +121,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SQLWindow.xaml">
+    <Page Include="Windows\SqlWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\TableFormWindow.xaml">
+    <Page Include="Windows\TablePlusSqlWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
