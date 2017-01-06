@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using MMDB.Extensions;
 using MMDB.Utils;
 
 namespace MMDB.Windows
@@ -52,11 +55,11 @@ namespace MMDB.Windows
 
         private DataTable GenerateRows(DataTable dataTable)
         {
-            dataTable.Rows.Add(1, "Jan", "Kowalski", 124436, DateTime.Now, "graphic5");
-            dataTable.Rows.Add(2, "Izabela", "Skorpion", 114515, DateTime.Now, "graphic");
-            dataTable.Rows.Add(3, "Grzegorz", "Cebula", 131234, DateTime.Now, "graphic2");
-            dataTable.Rows.Add(4, "Joanna", "Palec", 156789, DateTime.Now, "graphic4");
-            dataTable.Rows.Add(5, "Ewa", "Kot", 185367, DateTime.Now, "graphic3");
+            dataTable.Rows.Add(1, "Jan", "Kowalski", 124436, DateTime.Now, "graphic5.xaml", AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\");
+            dataTable.Rows.Add(2, "Izabela", "Skorpion", 114515, DateTime.Now, "graphic.xaml", AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\");
+            dataTable.Rows.Add(3, "Grzegorz", "Cebula", 131234, DateTime.Now, "graphic2.xaml", AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\");
+            dataTable.Rows.Add(4, "Joanna", "Palec", 156789, DateTime.Now, "graphic4.xaml", AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\");
+            dataTable.Rows.Add(5, "Ewa", "Kot", 185367, DateTime.Now, "graphic3.xaml", AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\");
 
             return dataTable;
         }
@@ -102,18 +105,29 @@ namespace MMDB.Windows
             if (sqlCommand.Contains("select") && sqlCommand.Contains("from"))
             {
                 // getting column names
-                var pFrom = sqlCommand.IndexOf("select ", StringComparison.Ordinal) + "select ".Length;
-                var pTo = sqlCommand.LastIndexOf(" from", StringComparison.Ordinal);
-                var sqlCommandColumns = sqlCommand.Substring(pFrom, pTo - pFrom);
+                var sqlCommandColumns = sqlCommand.Substring("select ", " from");
                 // getting array of names
                 var sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
                 // get result
                 var results = new string[sqlCommandColumnsNames.Length][];
                 if (sqlCommand.Contains("where"))
                 {
-                    for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
-                        results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i]);
-                    PrintQueryResults(results);
+                    if (!sqlCommand.Contains("with attribute"))
+                    {
+                        List<string> filesFound = new List<string>();
+                        var sqlMmQuery = sqlCommand.Substring("graphic.Contains(", ")");
+                        var sqlMmQueryParts = sqlMmQuery.Split(' ');
+                        var files = from row in DataTable.AsEnumerable()
+                            select row.Field<string>("PATH") + row.Field<string>("GRAPHIC");
+                        foreach (var file in files)
+                            if (SqlMmParser.SearchResult(file, sqlMmQueryParts[0], Int32.Parse(sqlMmQueryParts[2]), sqlMmQueryParts[1]))
+                            {
+                                filesFound.Add(file);
+                            }
+                        for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
+                            results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i], filesFound);
+                        PrintQueryResults(results);
+                    }
                 }
                 else
                 {

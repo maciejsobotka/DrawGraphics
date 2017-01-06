@@ -4,6 +4,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using System.Xml;
+using MMDB.Utils;
 
 namespace MMDB.Windows
 {
@@ -49,110 +50,6 @@ namespace MMDB.Windows
         #endregion
         #region Private methods
 
-        private static bool SearchResult(string fileName, string shapeName, int shapeCount, string comparison, string attrName, string attrVal)
-        {
-            var xml = new XmlDocument();
-            xml.Load(fileName);
-            var nsMgr = new XmlNamespaceManager(xml.NameTable);
-            nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + attrVal + "']", nsMgr);
-            if (nodeList != null)
-            {
-                switch (comparison)
-                {
-                    case "==":
-                        if (nodeList.Count == shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "!=":
-                        if (nodeList.Count != shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">":
-                        if (nodeList.Count > shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<":
-                        if (nodeList.Count < shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">=":
-                        if (nodeList.Count >= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<=":
-                        if (nodeList.Count <= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                }
-            }
-            return false;
-        }
-
-        private static bool SearchResult(string fileName, string shapeName, int shapeCount, string comparison)
-        {
-            var xml = new XmlDocument();
-            xml.Load(fileName);
-            var nsMgr = new XmlNamespaceManager(xml.NameTable);
-            nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
-            if (nodeList != null)
-            {
-                switch (comparison)
-                {
-                    case "==":
-                        if (nodeList.Count == shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "!=":
-                        if (nodeList.Count != shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">":
-                        if (nodeList.Count > shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<":
-                        if (nodeList.Count < shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">=":
-                        if (nodeList.Count >= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<=":
-                        if (nodeList.Count <= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                }
-            }
-            return false;
-        }
-
         private void changeFolderButton_Click(object sender, RoutedEventArgs e)
         {
             var folderBrowserDialogSource = new FolderBrowserDialog();
@@ -197,7 +94,7 @@ namespace MMDB.Windows
                 if (attributeComboBox.SelectedIndex == 0)
                 {
                     foreach (var file in files)
-                        if (SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
+                        if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
                         {
                             filesFound.Add(file);
                         }
@@ -208,7 +105,7 @@ namespace MMDB.Windows
                     {
                         var attributeName = attributeComboBox.SelectedItem.ToString();
                         var attributeValue = attributeValueComboBox.SelectedItem.ToString();
-                        if (SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, m_ColorDict[attributeValue]))
+                        if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, m_ColorDict[attributeValue]))
                         {
                             filesFound.Add(file);
                         }

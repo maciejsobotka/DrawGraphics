@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Windows.Documents;
 
 namespace MMDB.Utils
 {
@@ -30,7 +32,7 @@ namespace MMDB.Utils
             return result;
         }
 
-        public static string[] GetSqlWhereResultString(DataTable dataTable, string columnName)
+        public static string[] GetSqlWhereResultString(DataTable dataTable, string columnName, List<string> graphics)
         {
             string[] result = null;
             if (dataTable.Columns.Contains(columnName))
@@ -38,15 +40,15 @@ namespace MMDB.Utils
                 var type = dataTable.Columns[columnName].DataType;
                 if (type.Name == "String")
                 {
-                    result = GetSqlWhereResult<string>(dataTable, columnName);
+                    result = GetSqlWhereResult<string>(dataTable, columnName, graphics);
                 }
                 if (type.Name == "Int32")
                 {
-                    result = GetSqlWhereResult<int>(dataTable, columnName);
+                    result = GetSqlWhereResult<int>(dataTable, columnName, graphics);
                 }
                 if (type.Name == "DateTime")
                 {
-                    result = GetSqlWhereResult<DateTime>(dataTable, columnName);
+                    result = GetSqlWhereResult<DateTime>(dataTable, columnName, graphics);
                 }
             }
             return result;
@@ -68,9 +70,10 @@ namespace MMDB.Utils
             return results;
         }
 
-        private static string[] GetSqlWhereResult<T>(DataTable dataTable, string columnName)
+        private static string[] GetSqlWhereResult<T>(DataTable dataTable, string columnName, List<string> graphics)
         {
             var columnData = from row in dataTable.AsEnumerable()
+                where graphics.Contains(row.Field<string>("PATH") + row.Field<string>("GRAPHIC"))
                 select row.Field<T>(columnName);
 
             var columnDataArray = columnData.ToArray();
