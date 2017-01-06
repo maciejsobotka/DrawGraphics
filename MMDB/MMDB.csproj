@@ -64,6 +64,7 @@
     <Compile Include="Extensions\ShapeExtensions.cs" />
     <Compile Include="Extensions\TriangleExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
+    <Compile Include="Utils\SqlParser.cs" />
     <Compile Include="Windows\GraphicPreviewWindow.xaml.cs">
       <DependentUpon>GraphicPreviewWindow.xaml</DependentUpon>
     </Compile>

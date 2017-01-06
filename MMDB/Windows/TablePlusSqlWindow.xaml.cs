@@ -61,18 +61,6 @@ namespace MMDB.Windows
             return dataTable;
         }
 
-        private void GetSqlResult<T>(string[] sqlCommandParts)
-        {
-            var results = from row in DataTable.AsEnumerable()
-                select row.Field<T>(sqlCommandParts[1]);
-            SqlResultsBox.Document.Blocks.Clear();
-            foreach (var result in results)
-            {
-                SqlResultsBox.AppendText(result.ToString());
-                SqlResultsBox.AppendText("\n");
-            }
-        }
-
         private DataTable InitializeDataGrid(DataGrid dataGrid, string tableName)
         {
             var dataTable = TableToFromXml.GetDataFromXml(dataGrid, tableName);
@@ -93,27 +81,45 @@ namespace MMDB.Windows
             return dataTable;
         }
 
+        private void PrintQueryResults(string[][] results)
+        {
+            if (results != null && results.Length > 0)
+            {
+                for (var i = 0; i < results[0].Length; ++i)
+                {
+                    foreach (var col in results)
+                        SqlResultsBox.AppendText(col[i] + ' ');
+                    SqlResultsBox.AppendText("\n");
+                }
+            }
+        }
+
         private void StartScriptButton_Click(object sender, RoutedEventArgs e)
         {
             var sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
-            var sqlCommandParts = sqlCommand.Split(' ');
-            if (sqlCommandParts.Length >= 4)
+            SqlResultsBox.Document.Blocks.Clear();
+
+            if (sqlCommand.Contains("select") && sqlCommand.Contains("from"))
             {
-                if (DataTable.Columns.Contains(sqlCommandParts[1]))
+                // getting column names
+                var pFrom = sqlCommand.IndexOf("select ", StringComparison.Ordinal) + "select ".Length;
+                var pTo = sqlCommand.LastIndexOf(" from", StringComparison.Ordinal);
+                var sqlCommandColumns = sqlCommand.Substring(pFrom, pTo - pFrom);
+                // getting array of names
+                var sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
+                // get result
+                var results = new string[sqlCommandColumnsNames.Length][];
+                if (sqlCommand.Contains("where"))
                 {
-                    var type = DataTable.Columns[sqlCommandParts[1]].DataType;
-                    if (type.Name == "String")
-                    {
-                        GetSqlResult<string>(sqlCommandParts);
-                    }
-                    if (type.Name == "Int32")
-                    {
-                        GetSqlResult<int>(sqlCommandParts);
-                    }
-                    if (type.Name == "DateTime")
-                    {
-                        GetSqlResult<DateTime>(sqlCommandParts);
-                    }
+                    for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
+                        results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i]);
+                    PrintQueryResults(results);
+                }
+                else
+                {
+                    for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
+                        results[i] = SqlParser.GetSqlColumnResultString(DataTable, sqlCommandColumnsNames[i]);
+                    PrintQueryResults(results);
                 }
             }
         }
