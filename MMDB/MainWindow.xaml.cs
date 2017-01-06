@@ -77,6 +77,7 @@ namespace MMDB
             p2 = Mouse.GetPosition(canvas);
             textBoxCoords.Text = p2.X + " x " + p2.Y;
             if (Mouse.LeftButton == MouseButtonState.Pressed && operationType == Operations.None)
+            {
                 if (!shapeCreated)
                 {
                     Shape shape;
@@ -116,6 +117,7 @@ namespace MMDB
                     clickedShape.Resize(p1, p2);
                     listOfObjects.Items[index] = clickedShape.ParametersToString();
                 }
+            }
         }
 
         private void childWindow_MyEvent(object sender, EventArgs e)
@@ -255,7 +257,9 @@ namespace MMDB
                 textBoxFileName.Text = dlg.SafeFileName;
 
                 if (graphicNew || graphicLoaded)
+                {
                     ClearObjects();
+                }
                 canvas.Background = Brushes.White;
                 graphicLoaded = true;
                 graphicNew = false;
@@ -275,6 +279,18 @@ namespace MMDB
                 }
                 saveFile.Foreground = Brushes.White;
             }
+        }
+
+        private void OpenSearchWindow_Click(object sender, RoutedEventArgs e)
+        {
+            searchWindow = new SearchWindow();
+            searchWindow.Show();
+        }
+
+        private void OpenTablePlusSqlWindow_Click(object sender, RoutedEventArgs e)
+        {
+            tableFormWindow = new TablePlusSqlWindow();
+            tableFormWindow.Show();
         }
 
         private void operationButton_Click(object sender, RoutedEventArgs e)
@@ -415,20 +431,24 @@ namespace MMDB
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.N && Keyboard.Modifiers == ModifierKeys.Control)
+            {
                 NewFile_Click(sender, e);
+            }
             if (e.Key == Key.O && Keyboard.Modifiers == ModifierKeys.Control)
+            {
                 OpenFile_Click(sender, e);
+            }
             if (e.Key == Key.S && Keyboard.Modifiers == ModifierKeys.Control)
+            {
                 SaveFile_Click(sender, e);
+            }
             if (e.Key == Key.F && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                searchWindow = new SearchWindow();
-                searchWindow.Show();
+                OpenSearchWindow_Click(sender, e);
             }
             if (e.Key == Key.T && Keyboard.Modifiers == ModifierKeys.Control)
             {
-                tableFormWindow = new TablePlusSqlWindow();
-                tableFormWindow.Show();
+                OpenTablePlusSqlWindow_Click(sender, e);
             }
         }
 

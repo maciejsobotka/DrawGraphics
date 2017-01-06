@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+﻿using System.Xml;
 
 namespace MMDB.Utils
 {
     public static class SqlMmParser
     {
+        #region Public static methods
+
         public static bool SearchResult(string fileName, string shapeName, int shapeCount, string comparison, string attrName, string attrVal)
         {
             var xml = new XmlDocument();
@@ -112,5 +109,7 @@ namespace MMDB.Utils
             }
             return false;
         }
+
+        #endregion
     }
 }

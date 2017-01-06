@@ -34,6 +34,14 @@
                           MouseLeave="menuOption_MouseLeave" IsEnabled="False" />
 
             </MenuItem>
+            <MenuItem x:Name="windowMenu" Header="Window" Background="Black" Style="{DynamicResource MenuItemStyle}">
+                <MenuItem x:Name="sqlMmWindowOption" Header="SQL MM Window" Foreground="White" Background="Black"
+                          Click="OpenTablePlusSqlWindow_Click" InputGestureText="Ctrl+T" MouseEnter="menuOption_MouseEnter"
+                          MouseLeave="menuOption_MouseLeave" />
+                <MenuItem x:Name="searchWindowOption" Header="Search Window" Foreground="White" Background="Black" Click="OpenSearchWindow_Click"
+                          InputGestureText="Ctrl+F" MouseEnter="menuOption_MouseEnter"
+                          MouseLeave="menuOption_MouseLeave" BorderBrush="Black" />
+            </MenuItem>
         </Menu>
         <Rectangle x:Name="fillRectangle" HorizontalAlignment="Left" Height="30" Margin="50,506,0,0"
                    VerticalAlignment="Top" Width="30" Stroke="Black" />

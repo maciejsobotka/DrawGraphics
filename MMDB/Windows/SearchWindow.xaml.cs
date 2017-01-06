@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
-using System.Xml;
 using MMDB.Utils;
 
 namespace MMDB.Windows

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using MMDB.Extensions;
 using MMDB.Utils;
 
@@ -99,45 +100,61 @@ namespace MMDB.Windows
 
         private void StartScriptButton_Click(object sender, RoutedEventArgs e)
         {
-            var sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
-            SqlResultsBox.Document.Blocks.Clear();
-
-            if (sqlCommand.Contains("select") && sqlCommand.Contains("from"))
+            try
             {
-                // getting column names
-                var sqlCommandColumns = sqlCommand.Substring("select ", " from");
-                // getting array of names
-                var sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
-                // get result
-                var results = new string[sqlCommandColumnsNames.Length][];
-                if (sqlCommand.Contains("where"))
+                var sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
+                SqlResultsBox.Document.Blocks.Clear();
+
+                if (sqlCommand.Contains("select") && sqlCommand.Contains("from"))
                 {
-                    if (!sqlCommand.Contains("with attribute"))
+                    // getting column names
+                    var sqlCommandColumns = sqlCommand.Substring("select ", " from");
+                    // getting array of names
+                    var sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
+                    // get result
+                    var results = new string[sqlCommandColumnsNames.Length][];
+                    if (sqlCommand.Contains("where"))
                     {
-                        List<string> filesFound = new List<string>();
-                        var sqlMmQuery = sqlCommand.Substring("graphic.Contains(", ")");
-                        var sqlMmQueryParts = sqlMmQuery.Split(' ');
-                        var files = from row in DataTable.AsEnumerable()
-                            select row.Field<string>("PATH") + row.Field<string>("GRAPHIC");
-                        foreach (var file in files)
-                            if (SqlMmParser.SearchResult(file, sqlMmQueryParts[0], Int32.Parse(sqlMmQueryParts[2]), sqlMmQueryParts[1]))
-                            {
-                                filesFound.Add(file);
-                            }
+                        if (!sqlCommand.Contains("with attribute"))
+                        {
+                            List<string> filesFound = new List<string>();
+                            var sqlMmQuery = sqlCommand.Substring("graphic.Contains(", ")");
+                            var sqlMmQueryParts = sqlMmQuery.Split(' ');
+                            var files = from row in DataTable.AsEnumerable()
+                                select row.Field<string>("PATH") + row.Field<string>("GRAPHIC");
+                            foreach (var file in files)
+                                if (SqlMmParser.SearchResult(file, sqlMmQueryParts[0], Int32.Parse(sqlMmQueryParts[2]), sqlMmQueryParts[1]))
+                                {
+                                    filesFound.Add(file);
+                                }
+                            for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
+                                results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i], filesFound);
+                            PrintQueryResults(results);
+                        }
+                    }
+                    else
+                    {
                         for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
-                            results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i], filesFound);
+                            results[i] = SqlParser.GetSqlColumnResultString(DataTable, sqlCommandColumnsNames[i]);
                         PrintQueryResults(results);
                     }
+
                 }
-                else
-                {
-                    for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
-                        results[i] = SqlParser.GetSqlColumnResultString(DataTable, sqlCommandColumnsNames[i]);
-                    PrintQueryResults(results);
-                }
+
+            }
+            catch (Exception exeption)
+            {
             }
         }
 
         #endregion
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                StartScriptButton_Click(sender, e);
+            }
+        }
     }
 }
