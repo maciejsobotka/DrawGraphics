@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -19,7 +18,7 @@ namespace MMDB.Windows
         #region Properties
 
         public DataTable DataTable { get; set; }
-        public SqlWindow SqlWindow { get; set; }
+        public SearchResultWindow SearchResultWindow { get; set; }
 
         #endregion
         #region Ctors
@@ -67,7 +66,7 @@ namespace MMDB.Windows
 
         private DataTable InitializeDataGrid(DataGrid dataGrid, string tableName)
         {
-            var dataTable = TableToFromXml.GetDataFromXml(dataGrid, tableName);
+            DataTable dataTable = TableToFromXml.GetDataFromXml(dataGrid, tableName);
             if (dataTable == null)
             {
                 dataTable = new DataTable("Table");
@@ -91,7 +90,7 @@ namespace MMDB.Windows
             {
                 for (var i = 0; i < results[0].Length; ++i)
                 {
-                    foreach (var col in results)
+                    foreach (string[] col in results)
                         SqlResultsBox.AppendText(col[i] + ' ');
                     SqlResultsBox.AppendText("\n");
                 }
@@ -102,28 +101,33 @@ namespace MMDB.Windows
         {
             try
             {
-                var sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
+                // working queries
+                // select name, id, add_date from table where graphic.Contains(Ellipse >= 2)
+                // select name, id, add_date from table where graphic.Contains(Ellipse >= 1 with attribute Fill == Blue)
+                string sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
                 SqlResultsBox.Document.Blocks.Clear();
 
                 if (sqlCommand.Contains("select") && sqlCommand.Contains("from"))
                 {
                     // getting column names
-                    var sqlCommandColumns = sqlCommand.Substring("select ", " from");
+                    string sqlCommandColumns = sqlCommand.Substring("select ", " from");
                     // getting array of names
-                    var sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
+                    string[] sqlCommandColumnsNames = sqlCommandColumns.Split(new[] {", "}, StringSplitOptions.None);
                     // get result
                     var results = new string[sqlCommandColumnsNames.Length][];
                     if (sqlCommand.Contains("where"))
                     {
-                        if (!sqlCommand.Contains("with attribute"))
+                        var filesFound = new List<string>();
+                        string sqlMmQuery = sqlCommand.Substring("graphic.Contains(", ")");
+                        var path = DataTable.Rows[0].Field<string>("PATH");
+                        EnumerableRowCollection<string> files = from row in DataTable.AsEnumerable()
+                            select row.Field<string>("GRAPHIC");
+                        if (!sqlMmQuery.Contains("with attribute"))
                         {
-                            List<string> filesFound = new List<string>();
-                            var sqlMmQuery = sqlCommand.Substring("graphic.Contains(", ")");
-                            var sqlMmQueryParts = sqlMmQuery.Split(' ');
-                            var files = from row in DataTable.AsEnumerable()
-                                select row.Field<string>("PATH") + row.Field<string>("GRAPHIC");
-                            foreach (var file in files)
-                                if (SqlMmParser.SearchResult(file, sqlMmQueryParts[0], Int32.Parse(sqlMmQueryParts[2]), sqlMmQueryParts[1]))
+                            string[] sqlMmQueryParts = sqlMmQuery.Split(' ');
+
+                            foreach (string file in files)
+                                if (SqlMmParser.SearchResult(path + file, sqlMmQueryParts[0], int.Parse(sqlMmQueryParts[2]), sqlMmQueryParts[1]))
                                 {
                                     filesFound.Add(file);
                                 }
@@ -131,6 +135,23 @@ namespace MMDB.Windows
                                 results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i], filesFound);
                             PrintQueryResults(results);
                         }
+                        else
+                        {
+                            string[] sqlMmSplit = sqlMmQuery.Split(new[] {" with attribute "}, StringSplitOptions.None);
+                            string[] sqlMmQueryParams = sqlMmSplit[0].Split(' ');
+                            string[] sqlMmQueryAttributes = sqlMmSplit[1].Split(' ');
+
+                            foreach (string file in files)
+                                if (SqlMmParser.SearchResult(path + file, sqlMmQueryParams[0], int.Parse(sqlMmQueryParams[2]), sqlMmQueryParams[1], sqlMmQueryAttributes[0], sqlMmQueryAttributes[2]))
+                                {
+                                    filesFound.Add(file);
+                                }
+                            for (var i = 0; i < sqlCommandColumnsNames.Length; ++i)
+                                results[i] = SqlParser.GetSqlWhereResultString(DataTable, sqlCommandColumnsNames[i], filesFound);
+                            PrintQueryResults(results);
+                        }
+                        SearchResultWindow = new SearchResultWindow(filesFound, path);
+                        SearchResultWindow.Show();
                     }
                     else
                     {
@@ -138,16 +159,13 @@ namespace MMDB.Windows
                             results[i] = SqlParser.GetSqlColumnResultString(DataTable, sqlCommandColumnsNames[i]);
                         PrintQueryResults(results);
                     }
-
                 }
-
             }
-            catch (Exception exeption)
+            catch (Exception ex)
             {
+                SqlResultsBox.AppendText(ex.Message);
             }
         }
-
-        #endregion
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
@@ -156,5 +174,7 @@ namespace MMDB.Windows
                 StartScriptButton_Click(sender, e);
             }
         }
+
+        #endregion
     }
 }

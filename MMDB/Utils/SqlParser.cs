@@ -14,7 +14,7 @@ namespace MMDB.Utils
             string[] result = null;
             if (dataTable.Columns.Contains(columnName))
             {
-                var type = dataTable.Columns[columnName].DataType;
+                Type type = dataTable.Columns[columnName].DataType;
                 if (type.Name == "String")
                 {
                     result = GetSqlColumnResult<string>(dataTable, columnName);
@@ -36,7 +36,7 @@ namespace MMDB.Utils
             string[] result = null;
             if (dataTable.Columns.Contains(columnName))
             {
-                var type = dataTable.Columns[columnName].DataType;
+                Type type = dataTable.Columns[columnName].DataType;
                 if (type.Name == "String")
                 {
                     result = GetSqlWhereResult<string>(dataTable, columnName, graphics);
@@ -58,10 +58,10 @@ namespace MMDB.Utils
 
         private static string[] GetSqlColumnResult<T>(DataTable dataTable, string columnName)
         {
-            var columnData = from row in dataTable.AsEnumerable()
+            EnumerableRowCollection<T> columnData = from row in dataTable.AsEnumerable()
                 select row.Field<T>(columnName);
 
-            var columnDataArray = columnData.ToArray();
+            T[] columnDataArray = columnData.ToArray();
 
             var results = new string[columnData.Count()];
             for (var i = 0; i < columnData.Count(); ++i)
@@ -71,11 +71,11 @@ namespace MMDB.Utils
 
         private static string[] GetSqlWhereResult<T>(DataTable dataTable, string columnName, List<string> graphics)
         {
-            var columnData = from row in dataTable.AsEnumerable()
-                where graphics.Contains(row.Field<string>("PATH") + row.Field<string>("GRAPHIC"))
+            EnumerableRowCollection<T> columnData = from row in dataTable.AsEnumerable()
+                where graphics.Contains(row.Field<string>("GRAPHIC"))
                 select row.Field<T>(columnName);
 
-            var columnDataArray = columnData.ToArray();
+            T[] columnDataArray = columnData.ToArray();
 
             var results = new string[columnData.Count()];
             for (var i = 0; i < columnData.Count(); ++i)

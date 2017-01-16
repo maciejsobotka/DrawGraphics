@@ -15,7 +15,6 @@ namespace MMDB.Windows
         #region Private fields
 
         private readonly string[] m_Attributes = {"None", "Fill", "Stroke"};
-        private Dictionary<string, string> m_ColorDict;
         private readonly string[] m_Colors = {"White", "Black", "Gray", "Red", "Green", "Blue"};
         private string m_DbPath;
         private SearchResultWindow m_SearchResultWindow;
@@ -28,19 +27,18 @@ namespace MMDB.Windows
         public SearchWindow()
         {
             InitializeComponent();
-            InitializeColorDictionary();
             m_DbPath = AppDomain.CurrentDomain.BaseDirectory + "..\\..\\examples\\";
             //m_DbPath = "D:\\Sobot\\Programy\\Programy C#\\MMDB\\MMDB\\examples\\";
             folderPathTextBox.Text = m_DbPath;
-            foreach (var symbol in m_Symbols)
+            foreach (string symbol in m_Symbols)
                 comparisonComboBox.Items.Add(symbol);
             comparisonComboBox.SelectedIndex = 0;
-            foreach (var shape in m_Shapes)
+            foreach (string shape in m_Shapes)
                 shapeComboBox.Items.Add(shape);
-            foreach (var attr in m_Attributes)
+            foreach (string attr in m_Attributes)
                 attributeComboBox.Items.Add(attr);
             attributeComboBox.SelectedIndex = 0;
-            foreach (var color in m_Colors)
+            foreach (string color in m_Colors)
                 attributeValueComboBox.Items.Add(color);
             attributeValueComboBox.SelectedIndex = 0;
             shapeComboBox.SelectedIndex = 0;
@@ -57,23 +55,10 @@ namespace MMDB.Windows
             folderPathTextBox.Text = m_DbPath;
         }
 
-        private void InitializeColorDictionary()
-        {
-            m_ColorDict = new Dictionary<string, string>
-            {
-                {"White", "#FFFFFFFF"},
-                {"Black", "#FF000000"},
-                {"Gray", "#FF808080"},
-                {"Red", "#FFFF0000"},
-                {"Green", "#FF008000"},
-                {"Blue", "#FF0000FF"}
-            };
-        }
-
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
             var dirInfo = new DirectoryInfo(m_DbPath);
-            var info = dirInfo.GetFiles("*.xaml");
+            FileInfo[] info = dirInfo.GetFiles("*.xaml");
             var files = new string[info.Length];
             for (var i = 0; i < files.Length; ++i)
                 files[i] = info[i].Name;
@@ -92,7 +77,7 @@ namespace MMDB.Windows
             {
                 if (attributeComboBox.SelectedIndex == 0)
                 {
-                    foreach (var file in files)
+                    foreach (string file in files)
                         if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString()))
                         {
                             filesFound.Add(file);
@@ -100,11 +85,11 @@ namespace MMDB.Windows
                 }
                 else
                 {
-                    foreach (var file in files)
+                    foreach (string file in files)
                     {
-                        var attributeName = attributeComboBox.SelectedItem.ToString();
-                        var attributeValue = attributeValueComboBox.SelectedItem.ToString();
-                        if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, m_ColorDict[attributeValue]))
+                        string attributeName = attributeComboBox.SelectedItem.ToString();
+                        string attributeValue = attributeValueComboBox.SelectedItem.ToString();
+                        if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, attributeValue))
                         {
                             filesFound.Add(file);
                         }
