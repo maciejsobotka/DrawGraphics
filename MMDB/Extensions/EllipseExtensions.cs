@@ -9,6 +9,11 @@ namespace MMDB.Extensions
     {
         #region Public static methods
 
+        public static double Area(this Ellipse ellipse)
+        {
+            return Math.PI * (ellipse.Height / 2) * (ellipse.Width / 2);
+        }
+
         public static Ellipse Create(this Ellipse ellipse, Point p1, Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
         {
             ellipse.Height = Math.Abs(p1.Y - p2.Y);
@@ -16,10 +21,16 @@ namespace MMDB.Extensions
             ellipse.StrokeThickness = strokeThickness;
             ellipse.Stroke = strokeBrush;
             ellipse.Fill = fillBrush;
-            var leftMargin = p1.X;
-            var topMargin = p1.Y;
-            if (p1.X > p2.X) leftMargin = p2.X;
-            if (p1.Y > p2.Y) topMargin = p2.Y;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X)
+            {
+                leftMargin = p2.X;
+            }
+            if (p1.Y > p2.Y)
+            {
+                topMargin = p2.Y;
+            }
             ellipse.Margin = new Thickness(leftMargin, topMargin, 0, 0);
 
             return ellipse;
@@ -35,8 +46,6 @@ namespace MMDB.Extensions
             return new Point(ellipse.Margin.Left + ellipse.Width, ellipse.Margin.Top + ellipse.Height);
         }
 
-        //=====================================================================
-        // ToString
         public static string ParametersToString(this Ellipse ellipse)
         {
             return "ellipse: p=("
@@ -49,14 +58,25 @@ namespace MMDB.Extensions
                    + "fill=" + ellipse.Fill;
         }
 
+        public static double Perimeter(this Ellipse ellipse)
+        {
+            return 2 * Math.PI * Math.Sqrt((Math.Pow(ellipse.Height, 2) + Math.Pow(ellipse.Width, 2)) / 8);
+        }
+
         public static void Resize(this Ellipse ellipse, Point p1, Point p2)
         {
             ellipse.Height = Math.Abs(p1.Y - p2.Y);
             ellipse.Width = Math.Abs(p1.X - p2.X);
-            var leftMargin = p1.X;
-            var topMargin = p1.Y;
-            if (p1.X > p2.X) leftMargin = p2.X;
-            if (p1.Y > p2.Y) topMargin = p2.Y;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X)
+            {
+                leftMargin = p2.X;
+            }
+            if (p1.Y > p2.Y)
+            {
+                topMargin = p2.Y;
+            }
             ellipse.Margin = new Thickness(leftMargin, topMargin, 0, 0);
         }
 

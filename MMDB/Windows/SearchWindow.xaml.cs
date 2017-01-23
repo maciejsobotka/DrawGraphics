@@ -14,11 +14,11 @@ namespace MMDB.Windows
     {
         #region Private fields
 
-        private readonly string[] m_Attributes = {"None", "Fill", "Stroke"};
+        private readonly string[] m_Attributes = {"None", "Fill", "Stroke", "Area", "Perimeter"};
         private readonly string[] m_Colors = {"White", "Black", "Gray", "Red", "Green", "Blue"};
         private string m_DbPath;
         private SearchResultWindow m_SearchResultWindow;
-        private readonly string[] m_Shapes = {"Line", "Ellipse", "Rectangle", "Triangle"};
+        private readonly string[] m_Shapes = {"Line", "Ellipse", "Rectangle", "Triangle", "Elem"};
         private readonly string[] m_Symbols = {"==", "!=", ">", "<", ">=", "<="};
 
         #endregion
@@ -83,12 +83,24 @@ namespace MMDB.Windows
                             filesFound.Add(file);
                         }
                 }
-                else
+                if (attributeComboBox.SelectedIndex == 1 || attributeComboBox.SelectedIndex == 2)
                 {
                     foreach (string file in files)
                     {
                         string attributeName = attributeComboBox.SelectedItem.ToString();
                         string attributeValue = attributeValueComboBox.SelectedItem.ToString();
+                        if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, attributeValue))
+                        {
+                            filesFound.Add(file);
+                        }
+                    }
+                }
+                if (attributeComboBox.SelectedIndex == 3 || attributeComboBox.SelectedIndex == 4)
+                {
+                    foreach (string file in files)
+                    {
+                        string attributeName = attributeComboBox.SelectedItem.ToString();
+                        string attributeValue = attributeValueTextBox.Text;
                         if (SqlMmParser.SearchResult(file, shape, numberOfShapes, comparisonComboBox.SelectedItem.ToString(), attributeName, attributeValue))
                         {
                             filesFound.Add(file);
@@ -101,5 +113,19 @@ namespace MMDB.Windows
         }
 
         #endregion
+
+        private void attributeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            if (attributeComboBox.SelectedIndex == 3 || attributeComboBox.SelectedIndex == 4)
+            {
+                attributeValueComboBox.Visibility = Visibility.Hidden;
+                attributeValueTextBox.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                attributeValueTextBox.Visibility = Visibility.Hidden;
+                attributeValueComboBox.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

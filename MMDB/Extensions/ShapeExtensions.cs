@@ -42,6 +42,24 @@ namespace MMDB.Extensions
             if (shape is Polygon) (shape as Polygon).Resize(p1, p2);
         }
 
+        public static double Perimeter(this Shape shape)
+        {
+            if (shape is Ellipse) return (shape as Ellipse).Perimeter();
+            if (shape is Rectangle) return (shape as Rectangle).Perimeter();
+            if (shape is Polygon) return (shape as Polygon).Perimeter();
+
+            return 0.0;
+        }
+
+        public static double Area(this Shape shape)
+        {
+            if (shape is Ellipse) return (shape as Ellipse).Area();
+            if (shape is Rectangle) return (shape as Rectangle).Area();
+            if (shape is Polygon) return (shape as Polygon).Area();
+
+            return 0.0;
+        }
+
         #endregion
     }
 }

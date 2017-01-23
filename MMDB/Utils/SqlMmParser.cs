@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Xml;
 
 namespace MMDB.Utils
@@ -34,48 +36,130 @@ namespace MMDB.Utils
             xml.Load(fileName);
             var nsMgr = new XmlNamespaceManager(xml.NameTable);
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + m_ColorDict[attrVal] + "']", nsMgr);
-            if (nodeList != null)
+            XmlNodeList nodeList;
+            int shapesFound = 0;
+            if (shapeName == "Elem")
             {
-                switch (comparison)
+                if (attrName == "Fill" || attrName == "Stroke")
                 {
-                    case "==":
-                        if (nodeList.Count == shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "!=":
-                        if (nodeList.Count != shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">":
-                        if (nodeList.Count > shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<":
-                        if (nodeList.Count < shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case ">=":
-                        if (nodeList.Count >= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
-                    case "<=":
-                        if (nodeList.Count <= shapeCount)
-                        {
-                            return true;
-                        }
-                        break;
+                    nodeList = xml.SelectNodes("//x:Canvas/*[@" + attrName + "='" + m_ColorDict[attrVal] + "']", nsMgr);
+                    if (nodeList == null)
+                    {
+                        return false;
+                    }
+                    shapesFound = nodeList.Count;
                 }
+                if (attrName == "Perimeter" || attrName == "Area")
+                {
+                    nodeList = xml.SelectNodes("//x:Canvas/*", nsMgr);
+                    if (nodeList == null)
+                    {
+                        return false;
+                    }
+
+                    double val = double.Parse(attrVal);
+                    if (val == 0)
+                    {
+                        return false;
+                    }
+                    foreach (XmlNode node in nodeList)
+                    {
+                        double area = 0.0;
+                        if (attrName == "Perimeter")
+                        {
+                            area = CalculatePerimeter.GetPerimeter(node);
+                        }
+                        if (attrName == "Area")
+                        {
+                            area = CalculateArea.GetArea(node);
+                        }
+                        if (area >= val - val / 10 && area <= val + val / 10)
+                        {
+                            shapesFound++;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (attrName == "Fill" || attrName == "Stroke")
+                {
+                    nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "[@" + attrName + "='" + m_ColorDict[attrVal] + "']", nsMgr);
+                    if (nodeList == null)
+                    {
+                        return false;
+                    }
+                    shapesFound = nodeList.Count;
+                }
+                if (attrName == "Perimeter" || attrName == "Area")
+                {
+                    nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
+                    if (nodeList == null)
+                    {
+                        return false;
+                    }
+
+                    double val = double.Parse(attrVal, CultureInfo.InvariantCulture);
+                    if (val == 0)
+                    {
+                        return false;
+                    }
+                    foreach (XmlNode node in nodeList)
+                    {
+                        double area = 0.0;
+                        if (attrName == "Perimeter")
+                        { 
+                            area = CalculatePerimeter.GetPerimeter(node);
+                        }
+                        if (attrName == "Area")
+                        {
+                            area = CalculateArea.GetArea(node);
+                        }
+                        if (area >= val - val / 10 && area <= val + val / 10)
+                        {
+                            shapesFound++;
+                        }
+                    }
+                }
+            }
+            switch (comparison)
+            {
+                case "==":
+                    if (shapesFound == shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
+                case "!=":
+                    if (shapesFound != shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
+                case ">":
+                    if (shapesFound > shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
+                case "<":
+                    if (shapesFound < shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
+                case ">=":
+                    if (shapesFound >= shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
+                case "<=":
+                    if (shapesFound <= shapeCount)
+                    {
+                        return true;
+                    }
+                    break;
             }
             return false;
         }
@@ -86,7 +170,15 @@ namespace MMDB.Utils
             xml.Load(fileName);
             var nsMgr = new XmlNamespaceManager(xml.NameTable);
             nsMgr.AddNamespace("x", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
-            var nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
+            XmlNodeList nodeList;
+            if (shapeName == "Elem")
+            {
+                nodeList = xml.SelectNodes("//x:Canvas/*", nsMgr);
+            }
+            else
+            {
+                nodeList = xml.SelectNodes("//x:Canvas/x:" + shapeName + "", nsMgr);
+            }
             if (nodeList != null)
             {
                 switch (comparison)

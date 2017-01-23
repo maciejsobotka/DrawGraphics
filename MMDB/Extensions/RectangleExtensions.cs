@@ -9,6 +9,11 @@ namespace MMDB.Extensions
     {
         #region Public static methods
 
+        public static double Area(this Rectangle rectangle)
+        {
+            return rectangle.Height * rectangle.Width;
+        }
+
         public static Rectangle Create(this Rectangle rectangle, Point p1, Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
         {
             rectangle.Height = Math.Abs(p1.Y - p2.Y);
@@ -16,10 +21,16 @@ namespace MMDB.Extensions
             rectangle.StrokeThickness = strokeThickness;
             rectangle.Stroke = strokeBrush;
             rectangle.Fill = fillBrush;
-            var leftMargin = p1.X;
-            var topMargin = p1.Y;
-            if (p1.X > p2.X) leftMargin = p2.X;
-            if (p1.Y > p2.Y) topMargin = p2.Y;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X)
+            {
+                leftMargin = p2.X;
+            }
+            if (p1.Y > p2.Y)
+            {
+                topMargin = p2.Y;
+            }
             rectangle.Margin = new Thickness(leftMargin, topMargin, 0, 0);
 
             return rectangle;
@@ -35,8 +46,6 @@ namespace MMDB.Extensions
             return new Point(rectangle.Margin.Left + rectangle.Width, rectangle.Margin.Top + rectangle.Height);
         }
 
-        //=====================================================================
-        // ToString
         public static string ParametersToString(this Rectangle rectangle)
         {
             return "rectangle: p1=("
@@ -56,14 +65,25 @@ namespace MMDB.Extensions
                    + "fill=" + rectangle.Fill;
         }
 
+        public static double Perimeter(this Rectangle rectangle)
+        {
+            return 2 * (rectangle.Height + rectangle.Width);
+        }
+
         public static void Resize(this Rectangle rectangle, Point p1, Point p2)
         {
             rectangle.Height = Math.Abs(p1.Y - p2.Y);
             rectangle.Width = Math.Abs(p1.X - p2.X);
-            var leftMargin = p1.X;
-            var topMargin = p1.Y;
-            if (p1.X > p2.X) leftMargin = p2.X;
-            if (p1.Y > p2.Y) topMargin = p2.Y;
+            double leftMargin = p1.X;
+            double topMargin = p1.Y;
+            if (p1.X > p2.X)
+            {
+                leftMargin = p2.X;
+            }
+            if (p1.Y > p2.Y)
+            {
+                topMargin = p2.Y;
+            }
             rectangle.Margin = new Thickness(leftMargin, topMargin, 0, 0);
         }
 

@@ -104,6 +104,8 @@ namespace MMDB.Windows
                 // working queries
                 // select name, id, add_date from table where graphic.Contains(Ellipse >= 2)
                 // select name, id, add_date from table where graphic.Contains(Ellipse >= 1 with attribute Fill == Blue)
+                // select name, id, add_date from table where graphic.Contains(Ellipse >= 1 with attribute Area == 14000)
+                // select name, id, number, graphic from table where graphic.Contains(Elem >= 1 with attribute Perimeter == 500)
                 string sqlCommand = new TextRange(SqlCommandsBox.Document.ContentStart, SqlCommandsBox.Document.ContentEnd).Text;
                 SqlResultsBox.Document.Blocks.Clear();
 
@@ -163,7 +165,7 @@ namespace MMDB.Windows
             }
             catch (Exception ex)
             {
-                SqlResultsBox.AppendText(ex.Message);
+                SqlResultsBox.AppendText(ex.Message + '\n' + ex.StackTrace);
             }
         }
 

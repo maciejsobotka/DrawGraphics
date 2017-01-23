@@ -9,6 +9,11 @@ namespace MMDB.Extensions
     {
         #region Public static methods
 
+        public static double Area(this Polygon triangle)
+        {
+            return triangle.Height * triangle.Width / 2;
+        }
+
         public static Polygon Create(this Polygon triangle, Point p1, Point p2, int strokeThickness, Brush strokeBrush, Brush fillBrush)
         {
             Point t1, t2, t3;
@@ -77,8 +82,6 @@ namespace MMDB.Extensions
             return p;
         }
 
-        //=====================================================================
-        // ToString
         public static string ParametersToString(this Polygon triangle)
         {
             return "triangle: p1=("
@@ -93,6 +96,14 @@ namespace MMDB.Extensions
                    + "stroke=" + triangle.StrokeThickness + ", "
                    + "brush=" + triangle.Stroke + ", "
                    + "fill=" + triangle.Fill;
+        }
+
+        public static double Perimeter(this Polygon triangle)
+        {
+            double a = Math.Sqrt(Math.Pow(triangle.Points[0].X - triangle.Points[1].X, 2) + Math.Pow(triangle.Points[0].Y - triangle.Points[1].Y, 2));
+            double b = Math.Sqrt(Math.Pow(triangle.Points[1].X - triangle.Points[2].X, 2) + Math.Pow(triangle.Points[1].Y - triangle.Points[2].Y, 2));
+            double c = Math.Sqrt(Math.Pow(triangle.Points[2].X - triangle.Points[0].X, 2) + Math.Pow(triangle.Points[2].Y - triangle.Points[0].Y, 2));
+            return a + b + c;
         }
 
         public static void Resize(this Polygon triangle, Point p1, Point p2)

@@ -65,6 +65,8 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TriangleExtensions.cs" />
     <Compile Include="Extensions\RectangleExtensions.cs" />
+    <Compile Include="Utils\CalculateArea.cs" />
+    <Compile Include="Utils\CalculatePerimeter.cs" />
     <Compile Include="Utils\SqlMmParser.cs" />
     <Compile Include="Utils\SqlParser.cs" />
     <Compile Include="Windows\GraphicPreviewWindow.xaml.cs">
@@ -79,9 +81,6 @@
     </Compile>
     <Compile Include="Windows\SearchWindow.xaml.cs">
       <DependentUpon>SearchWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SqlWindow.xaml.cs">
-      <DependentUpon>SqlWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\TablePlusSqlWindow.xaml.cs">
       <DependentUpon>TablePlusSqlWindow.xaml</DependentUpon>
@@ -121,10 +120,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SearchWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Windows\SqlWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
